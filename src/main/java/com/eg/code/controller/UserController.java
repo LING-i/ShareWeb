@@ -607,12 +607,13 @@ public class UserController {
         Map<String,Object> map = new HashMap<>();
         if(!file.isEmpty()){
             //获取文件名
-            String fileName = file.getOriginalFilename();
+            String fileName = file.getOriginalFilename();//1.jpg
             //获取文件的后缀名
-            String suffixName = fileName.substring(fileName.lastIndexOf("."));
+            String suffixName = fileName.substring(fileName.lastIndexOf(".")); //.jpg
             //新文件名
-            String newFileName = DateUtil.getCurrentDateStr()+suffixName;
+            String newFileName = DateUtil.getCurrentDateStr()+suffixName;//当前时间.jpg
             FileUtils.copyInputStreamToFile(file.getInputStream(),new File(imgFilePath+newFileName));
+            System.out.println(imgFilePath);
             map.put("success",true);
             map.put("imgName",newFileName);
             //把头像放到session和数据库
