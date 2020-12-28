@@ -38,4 +38,6 @@ public class Consts {
 
     /**用户失效资源总数*/
     public static final String UN_USEFUL_ARTICLE_COUNT = "unUsefulArticleCount";
+
+    public static final String YZM = "yzm";
 }

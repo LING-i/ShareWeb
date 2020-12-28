@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户控制器
@@ -63,6 +65,9 @@ public class UserController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private RedisTemplate<Object,Object> redisTemplate;//redis
 
     @Value("${imgFilePath}")
     private String imgFilePath;         //图片上传路径
@@ -186,10 +191,8 @@ public class UserController {
         message.setSubject("Java资源分享网-用户找回密码");           //主题
         message.setText("您本次的验证码是：" +mailCode);            //正文内容
         mailSender.send(message);
-        System.out.println(mailCode);
-
-        // TODO 将验证码缓存到Redis中实现过期失效；思路验证码直接缓存到Redis设置失效时间
-        session.setAttribute(Consts.MAIL_CODE_NAME,mailCode);   //验证码存到session
+        // 验证码缓存到redis中并设置有效期20秒
+        redisTemplate.opsForValue().set(Consts.YZM,mailCode,120, TimeUnit.SECONDS);
         session.setAttribute(Consts.USER_ID_NAME,u.getUserId());
 
         map.put("success",true);
@@ -209,16 +212,19 @@ public class UserController {
             return map;
         }
 
-        // TODO 将验证码缓存到Redis中实现过期失效；思路验证码直接缓存到Redis设置失效时间
-        String mailCode = (String) session.getAttribute(Consts.MAIL_CODE_NAME);
+        // 将验证码缓存到Redis中实现过期失效；验证码直接缓存到Redis设置失效时间
+        String  mailCode = (String) redisTemplate.opsForValue().get(Consts.YZM);
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID_NAME);
 
-        if(!yzm.equals(mailCode)){
+        if(mailCode == null){
+            map.put("success",false);
+            map.put("errorInfo","验证码已过期！");
+            return map;
+        }else if(!yzm.equals(mailCode)){
             map.put("success",false);
             map.put("errorInfo","验证码错误！");
             return map;
         }
-
         //给用户重置密码为123456
         User user = userService.getById(userId);
         user.setPassword((CryptographyUtil.md5(Consts.PASSWORD,CryptographyUtil.SALT)));
