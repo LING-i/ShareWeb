@@ -11,18 +11,21 @@
         <legend>用户注册</legend>
     </fieldset>
     <form class="layui-form" action="/user/register" method="post" style="text-align: center;">
+        <!--用户名模块-->
         <div class="layui-form-item" style="margin-bottom: 5px;">
             <label class="layui-form-label">用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
             <div class="layui-input-inline">
                 <input type="text" name="userName" required="true" placeholder="请输入用户名" lay-verify="userName" autocomplete="off" class="layui-input" style="width: 280px;"/>
             </div>
         </div>
+        <!--密码-->
         <div class="layui-form-item" style="margin-bottom: 5px;">
             <label class="layui-form-label">密&nbsp;&nbsp;码</label>
             <div class="layui-input-inline">
                 <input type="password" name="password" required="true" placeholder="请输入密码" lay-verify="password" autocomplete="off" class="layui-input" style="width: 280px;"/>
             </div>
         </div>
+        <!--昵称-->
         <div class="layui-form-item" style="margin-bottom: 5px;">
             <label class="layui-form-label">昵&nbsp;&nbsp;称</label>
             <div class="layui-input-inline">

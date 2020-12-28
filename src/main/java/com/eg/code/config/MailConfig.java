@@ -19,8 +19,9 @@ public class MailConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.qq.com");          //指定用来发送Email的邮件服务器主机名
         mailSender.setPort(587);                    //默认端口，标准的SMTP端口
-        mailSender.setUsername("gogospecter@qq.com");   //用户名
-        mailSender.setPassword("jzqplftsbmqvbfeb");                 //密码
+        mailSender.setUsername("413363115@qq.com");   //用户名
+        mailSender.setPassword("hresyiuuqnllbjch");                 //密码
         return  mailSender;
     }
+
 }

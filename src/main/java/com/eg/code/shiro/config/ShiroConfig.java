@@ -7,6 +7,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -25,19 +26,21 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
+    //ShiroFilterFactoryBean 需要关联的securityManager
     @Bean
-    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager){
+    public ShiroFilterFactoryBean shirFilter(@Qualifier("securityManager") SecurityManager securityManager){
+        //创建shiroFilterFactoryBean
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //必须设置securityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        //如果不设置，默认会自动寻找Web工程根目录下的"login.jsp"页面
+        //如果不设置，默认会自动寻找Web工程根目录下的"login.jsp"页面；拦截成功默认的跳转页面
         shiroFilterFactoryBean.setLoginUrl("/");
 
         //拦截器
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
         //过滤链定义，从上往下执行，一般将/**放在最下面     这是个坑，一不小心代码就不好使了
         // authc：所有的url必须认证通过才可以访问     anon:所有url都可以匿名访问
-        //配置不会被拦截的链接 顺序判断
+        //配置不会被拦截的链接 顺序判断     放行的连接
         filterChainDefinitionMap.put("/","anon");
         filterChainDefinitionMap.put("/static/**","anon");
         filterChainDefinitionMap.put("/ueditor/**","anon");
@@ -54,8 +57,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/article/**","anon");
         filterChainDefinitionMap.put("/comment/**","anon");
         filterChainDefinitionMap.put("/connect","anon");
-        filterChainDefinitionMap.put("/buyVIP","anon");
-        filterChainDefinitionMap.put("/fbzyzjf","anon");
+        filterChainDefinitionMap.put("/buyVIP","anon");  //首页的充值积分
+        filterChainDefinitionMap.put("/fbzyzjf","anon"); //首页的发布资源赚取积分
 
         filterChainDefinitionMap.put("/admin/login.html","anon");
 
@@ -65,22 +68,30 @@ public class ShiroConfig {
         //配置退出过滤器，其中的具体的退出代码Shiro已经帮我们实现了
         filterChainDefinitionMap.put("/user/logout","logout");
 
+
+
         filterChainDefinitionMap.put("/**","authc");
 
+        //将配置的过滤链条加入到shiroFilterFactoryBean
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+//        shiroFilterFactoryBean.setUnauthorizedUrl();  被授权拦截后跳转的页面
+
         return shiroFilterFactoryBean;
     }
 
+
+    //被ShiroFilterFactoryBean关联
     @Bean
-    public SecurityManager securityManager(){
+    public SecurityManager securityManager(@Qualifier("myRealm") MyRealm myRealm){
+        //Web应用的securityManager用DefaultWebSecurityManager
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        //设置realm
-        securityManager.setRealm(myRealm());
+        //SecurityManager中需要关联realm
+        securityManager.setRealm(myRealm);
         return securityManager;
     }
 
     /**
-     * 身份认证realm
+     * 身份认证realm，被SM关联
      * @return
      */
     @Bean
@@ -99,10 +110,11 @@ public class ShiroConfig {
 
     /**
      * 开启Shrio的注解（如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类，并在必要时进行安全逻辑验证
-     * 配置以下两个Bean即可实现这个功能
+     * 配置以下两个Bean即可实现这个功能，才能真正使用
      */
     @Bean
     @DependsOn("lifecycleBeanPostProcessor")
+    //创建默认的自动代理顾问
     public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
@@ -110,9 +122,10 @@ public class ShiroConfig {
     }
 
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(){
+    //属性授权来源顾问
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") SecurityManager securityManager){
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager());
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
 }

@@ -53,7 +53,7 @@ public class ArticleAdminController {
      * @return
      */
     @RequestMapping(value = "/list")
-    @RequiresPermissions(value = "分页查询资源信息列表")
+    @RequiresPermissions(value = "分页查询资源信息列表")  //开启shiro注解
     public Map<String,Object> list(Article s_article,
                                    @RequestParam(value = "nickname",required = false) String nickname,
                                    @RequestParam(value = "publishDates",required = false) String publishDates,

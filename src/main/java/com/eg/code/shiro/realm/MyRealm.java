@@ -24,17 +24,21 @@ public class MyRealm extends AuthorizingRealm {
     private UserService userService;
 
     /**
-     * 授权
+     * 授权--登录之后给用户授权--执行授权的逻辑
      * @param principalCollection
      * @return
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+
         String userName = (String) SecurityUtils.getSubject().getPrincipal();
         User user = userService.findByUserName(userName);
+
+        //授权信息，AuthorizationInfo的子类
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> roles = new HashSet<>();
-        if("管理员".equals(user.getRoleName())){
+
+        if("管理员".equals(user.getRoleName())){//根据用户的身份进行控制
             roles.add("管理员");
             info.addStringPermission("进入管理员主页");
             info.addStringPermission("根据id查询资源类型实体");
@@ -69,18 +73,19 @@ public class MyRealm extends AuthorizingRealm {
     }
 
     /**
-     * 权限认证
+     * 权限认证--登录时权限认证
      * @param authenticationToken
      * @return
      * @throws AuthenticationException
      */
     @Override
+    //认证信息 -- 执行认证逻辑
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        String userName = (String) authenticationToken.getPrincipal();
-        User user = userService.findByUserName(userName);
+        String userName = (String) authenticationToken.getPrincipal(); //getPrincipal方法的实现在UserNamePasswordToken中
+        User user = userService.findByUserName(userName);//根据用户名找到对应的用户对象
         if(user==null){
-            return null;
-        }else{
+            return null; //用户名不存在，shiro底层会抛出UnKnowAccountException
+        }else{//用户名存在，把查找到的密码传进去，shiro会自动判断密码是否正确     放置的user.getUserName()就是Principal
             AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user.getUserName(),user.getPassword(),"xx");
             return authenticationInfo;
         }

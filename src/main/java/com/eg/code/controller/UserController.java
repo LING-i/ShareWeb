@@ -7,8 +7,11 @@ import com.eg.code.entity.UserDownload;
 import com.eg.code.lucene.ArticleIndex;
 import com.eg.code.service.*;
 import com.eg.code.util.*;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,13 +68,16 @@ public class UserController {
     private String imgFilePath;         //图片上传路径
 
     /**
-     * 用户注册
+     * 用户注册、ResponseBody返回一个Json
+     * 使用@Valid注解，在接口请求的时候让Spring自己进行判断，根据User实体类里面的属性
+     * BindingResult 对象必须在 @Valid 的紧挨着的后面，否则接收不到错误信息
      */
     @ResponseBody
     @PostMapping("/register")
     public Map<String,Object> register(@Valid User user, BindingResult bindingResult){
+
         Map<String,Object> map = new HashMap<>();
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()){ //接受User中不符合要求的错误信息
             map.put("success",false);
             map.put("errorInfo",bindingResult.getFieldError().getDefaultMessage());
         }else if(userService.findByUserName(user.getUserName())!=null){
@@ -84,7 +90,7 @@ public class UserController {
             user.setPassword(CryptographyUtil.md5(user.getPassword(),CryptographyUtil.SALT));
             user.setRegistrationDate(new Date());
             user.setLatelyLoginTime(new Date());
-            user.setHeadPortrait("tou.jpg");
+            user.setHeadPortrait("tou.jpg");   //初始头像
             userService.save(user);
             map.put("success",true);
         }
@@ -98,19 +104,27 @@ public class UserController {
     @PostMapping("/login")
     public Map<String,Object> login(User user, HttpSession session){
         Map<String,Object> map = new HashMap<>();
+
         if(StringUtil.isEmpty(user.getUserName())){
             map.put("success",false);
             map.put("errorInfo","请输入用户名！");
         }else if(StringUtil.isEmpty(user.getPassword())){
             map.put("success",false);
             map.put("errorInfo","请输入密码！");
+
+        //用户名和密码都不为空
         }else{
+
             Subject subject = SecurityUtils.getSubject();
+            //封装UserName和Password
             UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),CryptographyUtil.md5(user.getPassword(),CryptographyUtil.SALT));
+
             try {
-                subject.login(token);       //登录验证
+                subject.login(token);       //登录验证，执行了login方法就会来到Myrealm的认证方法，没有异常就是登录成功
+                //SimpleAuthenticationInfo(user.getUserName(),user.getPassword(),"xx");放进去的userName
                 String userName = (String) SecurityUtils.getSubject().getPrincipal();
-                User currentUser = userService.findByUserName(userName);
+                User currentUser = userService.findByUserName(userName); //根据用户名拿到用户对象
+
                 if (currentUser.isOff()) {
                     map.put("success", false);
                     map.put("errorInfo", "该用户已封禁，请联系管理员！");
@@ -118,21 +132,28 @@ public class UserController {
                 } else {
                     currentUser.setLatelyLoginTime(new Date());
                     userService.save(currentUser);
+
                     //未读消息数放到session
                     Integer messageCount = messageService.getCountByUserId(currentUser.getUserId());
                     currentUser.setMessageCount(messageCount);
+
                     //失效资源数
                     Article s_article = new Article();
                     s_article.setUseful(false);
-                    s_article.setUser(currentUser);
+                    s_article.setUser(currentUser);   //根据用户名和 false   找失效资源数量
                     session.setAttribute(Consts.UN_USEFUL_ARTICLE_COUNT,articleService.getCount(s_article,null,null,null));
+
                     session.setAttribute(Consts.CURRENT_USER,currentUser);
                     map.put("success", true);
                 }
-            }catch (Exception e){
+            }catch (UnknownAccountException e){
                 e.printStackTrace();
                 map.put("success", false);
-                map.put("errorInfo", "用户名或密码错误！");
+                map.put("errorInfo", "用户名错误！");
+            }catch (IncorrectCredentialsException e){
+                e.printStackTrace();
+                map.put("success", false);
+                map.put("errorInfo", "密码错误！");
             }
         }
         return map;
@@ -157,17 +178,18 @@ public class UserController {
             map.put("errorInfo","邮箱不存在！");
             return map;
         }
-        String mailCode = StringUtil.genSixRandom();
+        String mailCode = StringUtil.genSixRandom();//生成6位验证码
         //发邮件
         SimpleMailMessage message = new SimpleMailMessage();        //消息构造器
-        message.setFrom("781505696@qq.com");                        //发件人
+        message.setFrom("413363115@qq.com");                        //发件人
         message.setTo(email);                                       //收件人
-        message.setSubject("Java资源分享网-用户找回密码");         //主题
+        message.setSubject("Java资源分享网-用户找回密码");           //主题
         message.setText("您本次的验证码是：" +mailCode);            //正文内容
         mailSender.send(message);
         System.out.println(mailCode);
-        //验证码存到session
-        session.setAttribute(Consts.MAIL_CODE_NAME,mailCode);
+
+        // TODO 将验证码缓存到Redis中实现过期失效；思路验证码直接缓存到Redis设置失效时间
+        session.setAttribute(Consts.MAIL_CODE_NAME,mailCode);   //验证码存到session
         session.setAttribute(Consts.USER_ID_NAME,u.getUserId());
 
         map.put("success",true);
@@ -186,6 +208,8 @@ public class UserController {
             map.put("errorInfo","验证码不能为空！");
             return map;
         }
+
+        // TODO 将验证码缓存到Redis中实现过期失效；思路验证码直接缓存到Redis设置失效时间
         String mailCode = (String) session.getAttribute(Consts.MAIL_CODE_NAME);
         Integer userId = (Integer) session.getAttribute(Consts.USER_ID_NAME);
 
@@ -202,6 +226,9 @@ public class UserController {
         map.put("success",true);
         return map;
     }
+
+
+
 
     /**
      * 资源管理
