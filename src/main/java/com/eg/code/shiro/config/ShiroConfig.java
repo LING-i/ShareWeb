@@ -53,6 +53,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/sendEmail","anon");
         filterChainDefinitionMap.put("/user/checkYzm","anon");
         filterChainDefinitionMap.put("/user/bindEmail","anon");
+        filterChainDefinitionMap.put("/user/toPublishHome/**","anon");
         filterChainDefinitionMap.put("/QQ/qqLogin","anon");
         filterChainDefinitionMap.put("/article/**","anon");
         filterChainDefinitionMap.put("/comment/**","anon");

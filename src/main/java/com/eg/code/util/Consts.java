@@ -39,5 +39,9 @@ public class Consts {
     /**用户失效资源总数*/
     public static final String UN_USEFUL_ARTICLE_COUNT = "unUsefulArticleCount";
 
+    //验证码
     public static final String YZM = "yzm";
+
+    //发布资源的用户
+    public static final String PUBLISH_USER = "publishUser";
 }

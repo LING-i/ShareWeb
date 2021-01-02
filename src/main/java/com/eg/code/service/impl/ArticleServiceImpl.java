@@ -2,6 +2,7 @@ package com.eg.code.service.impl;
 
 import com.eg.code.entity.ArcType;
 import com.eg.code.entity.Article;
+import com.eg.code.entity.UserPublish;
 import com.eg.code.lucene.ArticleIndex;
 import com.eg.code.repository.ArticleRepository;
 import com.eg.code.run.StartupRunner;
@@ -223,6 +224,28 @@ public class ArticleServiceImpl implements ArticleService {
             redisTemplate.opsForValue().set("article_" + article.getArticleId(), article);
         }
     }
+
+
+
+    //查找用户的热门资源
+    @Override
+    public Page<Article> list(Integer userId,Integer isHot, Integer page, Integer pageSize, Sort.Direction direction, String... properties) {
+        return articleRepository.findAll(new Specification<Article>() {
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Predicate predicate = criteriaBuilder.conjunction();
+                if(userId!=null){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("user").get("userId"),userId));
+                }
+                if (isHot != null) {                              //是否热门
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("isHot"), 1));
+                }
+
+                return predicate;
+            }
+        }, PageRequest.of(page-1,pageSize,direction,properties));
+    }
+
 
     @Override
     public Integer todayPublish() {

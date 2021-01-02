@@ -8,43 +8,41 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 用户下载实体
- */
 @Entity
-@Table(name="userDownload")
+@Table(name="userPublish")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","hander","fieldHandler"})
-public class UserDownload implements Serializable {
+public class UserPublish implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userDownloadId;          //用户下载id
+    private Integer userPublishId;          //用户发布的id
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date downloadDate;              //下载时间
+    private Date publishDate;              //发布的时间
 
     @ManyToOne
     @JoinColumn(name="articleId")
-    private Article article;                //下载资源
+    private Article article;                //发布的资源
 
     @ManyToOne
     @JoinColumn(name="userId")
-    private User user;                  //下载用户
+    private User user;
 
-    public Integer getUserDownloadId() {
-        return userDownloadId;
+    public Integer getUserPublishId() {
+        return userPublishId;
     }
 
-    public void setUserDownloadId(Integer userDownloadId) {
-        this.userDownloadId = userDownloadId;
+    public void setUserPublishId(Integer userPublishId) {
+        this.userPublishId = userPublishId;
     }
 
-    public Date getDownloadDate() {
-        return downloadDate;
+    public Date getPublishDate() {
+        return publishDate;
     }
 
-    public void setDownloadDate(Date downloadDate) {
-        this.downloadDate = downloadDate;
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public Article getArticle() {
@@ -63,4 +61,6 @@ public class UserDownload implements Serializable {
         this.user = user;
     }
 
+    public UserPublish() {
+    }
 }

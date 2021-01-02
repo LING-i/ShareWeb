@@ -30,6 +30,12 @@ public interface UserService {
     public User getById(Integer id);
 
     /**
+     * 根据articleId获取发布该资源的用户信息
+     */
+    public User getUserByarticleId(Integer articleId);
+
+
+    /**
      * 根据条件获取用户总数
      * @param s_user                条件
      * @param s_blatelyLoginTime    最近登录时间开始

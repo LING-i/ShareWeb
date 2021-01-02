@@ -1,9 +1,6 @@
 package com.eg.code.controller;
 
-import com.eg.code.entity.Article;
-import com.eg.code.entity.Message;
-import com.eg.code.entity.User;
-import com.eg.code.entity.UserDownload;
+import com.eg.code.entity.*;
 import com.eg.code.lucene.ArticleIndex;
 import com.eg.code.service.*;
 import com.eg.code.util.*;
@@ -46,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Resource
     private JavaMailSender mailSender;
@@ -65,6 +62,9 @@ public class UserController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private UserPublishService userPublishService;
 
     @Autowired
     private RedisTemplate<Object,Object> redisTemplate;//redis
@@ -278,7 +278,7 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/saveArticle")
-    public Map<String,Object> saveArticle(Article article,HttpSession session) throws IOException {
+     public Map<String,Object> saveArticle(Article article,HttpSession session) throws IOException {
         Map<String,Object> resultMap = new HashMap<>();
         if(article.getPoints()<0||article.getPoints()>10){
             resultMap.put("success",false);
@@ -300,6 +300,8 @@ public class UserController {
             article.setState(1);                //未审核状态
             article.setClick(new Random().nextInt(150)+50);         //设置点击数为50~200
             articleService.save(article);
+
+
             resultMap.put("success",true);
         }else{                              //修改资源
             Article oldArticle = articleService.getById(article.getArticleId());        //获取实体
@@ -377,6 +379,7 @@ public class UserController {
             //需要先删除评论
             commentService.deleteByArticleId(articleId);
             articleService.delete(articleId);
+            userPublishService.deleteByArticleId(articleId);
             //需要把资源从lucene里面删掉
             articleIndex.deleteIndex(String.valueOf(articleId));
             resultMap.put("success",true);
@@ -729,6 +732,34 @@ public class UserController {
         resultMap.put("success",true);
         return  resultMap;
     }
+
+    @GetMapping("/toPublishHome/{articleId}")
+    public ModelAndView toPublishHome(@PathVariable(value = "articleId",required = false)int articleId,HttpSession session){
+        ModelAndView mav = new ModelAndView();
+        //用articleId找到发布资源的用户
+        User publishUser = userService.getUserByarticleId(articleId);
+        session.setAttribute(Consts.PUBLISH_USER,publishUser);
+
+        //用户的Id信息分页查询用户发布的资源
+        Page<UserPublish> userPublishPage = userPublishService.list(publishUser.getUserId(),1,Consts.PAGE_SIZE, Sort.Direction.DESC,"publishDate");
+
+        //分页查询用户发布的热门资源
+        Page<Article> articleList = articleService.list(publishUser.getUserId(),1,1, Consts.PAGE_SIZE, Sort.Direction.DESC, "publishDate");
+
+
+        if(userPublishPage.getTotalElements()>0){
+            mav.addObject("userPublishList",userPublishPage.getContent());                //用户发布的资源
+        }
+        if(articleList.getTotalElements()>0){
+            mav.addObject("articleList",articleList.getContent());                //用户的热门资源
+
+        }
+
+        mav.setViewName("user/publishHome");
+        return mav;
+    }
+
+
 
 }
 

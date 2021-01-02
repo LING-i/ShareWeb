@@ -1,13 +1,16 @@
 package com.eg.code.controller;
 
 import com.eg.code.entity.Article;
+import com.eg.code.entity.User;
 import com.eg.code.lucene.ArticleIndex;
 import com.eg.code.service.ArcTypeService;
 import com.eg.code.service.ArticleService;
+import com.eg.code.service.UserService;
 import com.eg.code.util.Consts;
 import com.eg.code.util.HTMLUtil;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,6 +35,9 @@ public class ArticleController {
 
     @Autowired
     private ArticleIndex articleIndex;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 按资源类型分页查询资源列表
@@ -116,4 +122,9 @@ public class ArticleController {
         Article article = articleService.getById(articleId);
         return article.isFree();
     }
+
+
+
+
+
 }

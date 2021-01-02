@@ -236,4 +236,5 @@ public class Article implements Serializable {
     public void setUseful(boolean useful) {
         isUseful = useful;
     }
+
 }

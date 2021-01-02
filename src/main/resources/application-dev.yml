@@ -10,7 +10,7 @@ spring:
   thymeleaf:
     cache: false   #关闭thymeleaf缓存
   redis:
-    host: 192.168.110.152
+    host: 192.168.110.153
     port: 6379
     password:
     timeout: 5000ms

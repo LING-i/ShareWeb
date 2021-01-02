@@ -48,6 +48,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.getOne(id);
     }
 
+
+    @Override
+    public User getUserByarticleId(Integer articleId) {
+        return userRepository.findByArticleId(articleId);
+    }
+
+
     @Override
     public Long getCount(User s_user, String s_blatelyLoginTime, String s_elatelyLoginTime) {
         return userRepository.count(new Specification<User>() {

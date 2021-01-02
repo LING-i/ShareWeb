@@ -2,10 +2,12 @@ package com.eg.code.controller.admin;
 
 import com.eg.code.entity.Article;
 import com.eg.code.entity.Message;
+import com.eg.code.entity.UserPublish;
 import com.eg.code.lucene.ArticleIndex;
 import com.eg.code.service.ArticleService;
 import com.eg.code.service.CommentService;
 import com.eg.code.service.MessageService;
+import com.eg.code.service.UserPublishService;
 import com.eg.code.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class ArticleAdminController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private UserPublishService userPublishService;
 
     /**
      * 根据条件分页查询资源信息列表
@@ -84,7 +89,8 @@ public class ArticleAdminController {
         for(int i=0;i<idsStr.length;i++){
             //删除评论
             commentService.deleteByArticleId(Integer.parseInt(idsStr[i]));
-            articleService.delete(Integer.parseInt(idsStr[i]));           //删除帖子
+            articleService.delete(Integer.parseInt(idsStr[i]));//删除帖子
+            userPublishService.deleteByArticleId(Integer.parseInt(idsStr[i]));   //删除userPublish中给对应数据
             articleIndex.deleteIndex(idsStr[i]);                        //删除索引
         }
         resultMap.put("errorNo",0);
@@ -123,20 +129,27 @@ public class ArticleAdminController {
     @RequiresPermissions(value = "审核资源")
     public Map<String,Object> updateState(Article article){
         Article oldArticle = articleService.getById(article.getArticleId());
+
         Message message = new Message();
         message.setUser(oldArticle.getUser());
         message.setPublishDate(new Date());
         message.setArticleId(oldArticle.getArticleId());
         oldArticle.setCheckDate(new Date());
+
         if(article.getState()==2){
             message.setContent("【<font color='#00ff7f'>审核成功</font>】您发布的【"+oldArticle.getName()+"】资源审核成功！");
             oldArticle.setState(2);
+            //审核成功建立两张User和Article的关联表
+            userPublishService.addPublishArtcile(oldArticle);
+
+
         }else if(article.getState()==3){
             message.setContent("【<font color='#00ff7f'>审核失败</font>】您发布的【"+oldArticle.getName()+"】资源审核未成功！");
             message.setCause(article.getReason());
             oldArticle.setState(3);
             oldArticle.setReason(article.getReason());
         }
+
         messageService.save(message);
         articleService.save(oldArticle);
         if(oldArticle.getState()==2){

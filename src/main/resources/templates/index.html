@@ -29,7 +29,7 @@
             <div class="fly-panel" style="margin-bottom: 0;">
                 <ul class="fly-list">
                     <li th:each="article :${articleList}">
-                        <a class="fly-avatar">
+                        <a class="fly-avatar" th:href="@{'/user/toPublishHome/'+${article.articleId} }" target="_blank">
                             <img th:src="'/static/img/'+${article.user.headPortrait}" th:alt="${article.user.nickname}">
                         </a>
                         <h2>

@@ -44,6 +44,14 @@ public interface UserRepository extends JpaRepository<User,Integer>, JpaSpecific
     public User findByOpenId(String openId);
 
     /**
+     * 根据资源的Id查找发布资源的用户实体
+     * @return
+     */
+    @Query(value = "select * from user u where user_id = (select user_id from article where article_id = ?1)",nativeQuery = true)
+    public User findByArticleId(Integer articleId);
+
+
+    /**
      * 解除QQ绑定
      */
     @Transactional

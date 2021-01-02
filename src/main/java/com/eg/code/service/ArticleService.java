@@ -1,6 +1,9 @@
 package com.eg.code.service;
 
 import com.eg.code.entity.Article;
+import com.eg.code.entity.UserPublish;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 import java.util.List;
@@ -79,6 +82,13 @@ public interface ArticleService {
      */
     public Integer noAudit();
 
+    /**
+     * 根据用户id查询该用户发表的热门资源
+     */
+    public Page<Article> list(Integer userId,Integer isHot,Integer page, Integer pageSize, Sort.Direction direction, String... properties);
+
+
+
     //10条最新资源
     public List<Article> getNewArticle(Integer n);
 
@@ -87,4 +97,6 @@ public interface ArticleService {
 
     //10条随机资源（热搜推荐）
     public List<Article> getRandomArticle(Integer n);
+
+
 }
