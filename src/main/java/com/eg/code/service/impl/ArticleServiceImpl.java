@@ -229,7 +229,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     //查找用户的热门资源
     @Override
-    public Page<Article> list(Integer userId,Integer isHot, Integer page, Integer pageSize, Sort.Direction direction, String... properties) {
+    public Page<Article> list(Integer userId,Integer isHot,Integer state, Integer page, Integer pageSize, Sort.Direction direction, String... properties) {
         return articleRepository.findAll(new Specification<Article>() {
             @Override
             public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -240,7 +240,9 @@ public class ArticleServiceImpl implements ArticleService {
                 if (isHot != null) {                              //是否热门
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("isHot"), 1));
                 }
-
+                if(state != null){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"), 2));
+                }
                 return predicate;
             }
         }, PageRequest.of(page-1,pageSize,direction,properties));

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>个人中心--Java资源分享网</title>
+    <title>个人中心--资源分享网</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="java知识源码分享，java基础教学，java学习教程，程序员源码下载网站,一个java程序员都知道的分享网站" />
     <meta name="keywords" content="java,javafxw,java分享,java源码,java资源,java基础,java视频,java教程,java学习,java下载,java知识" />
@@ -48,7 +48,7 @@
                             <div class="layui-input-inline">
                                 <input type="text" id="email" name="email" required lay-verify="email" disabled="" th:value="${currentUser.email}" autocomplete="off" class="layui-input">
                             </div>
-                            <div class="layui-form-mid layui-word-aux">邮箱目前不可变更，如需变更请联系管理员:<a href="#" style="font-size: 12px; color: #4f99cf;">781505696@qq.com</a>。</div>
+                            <div class="layui-form-mid layui-word-aux">邮箱目前不可变更</div>
                         </div>
                         <div class="layui-form-item">
                             <label for="nickname" class="layui-form-label">昵称</label>
@@ -117,11 +117,11 @@
                     <ul class="app-bind">
                         <li class="fly-msg app-havebind">
                             <i class="iconfont icon-qq"></i>
-                            <span th:if="${currentUser.openId != null && currentUser.openId != ''}">已成功绑定，您可以使用QQ帐号直接登录Java资源分享网，当然，您也可以</span>
+                            <span th:if="${currentUser.openId != null && currentUser.openId != ''}">已成功绑定，您可以使用QQ帐号直接登录资源分享网，当然，您也可以</span>
                             <a th:if="${currentUser.openId != null && currentUser.openId != ''}" href="javascript:removeBind();" class="acc-unbind" type="qq_id">解除绑定</a>
 
                             <a th:if="${currentUser.openId == null || currentUser.openId == ''}" href="/QQ/qqLogin" onclick="layer.msg('正在绑定QQ', {icon:16, shade: 0.1, time:0})" class="acc-bind" type="qq_id">立即绑定</a>
-                            <span th:if="${currentUser.openId == null || currentUser.openId == ''}">，即可使用QQ帐号登录Java资源分享网 <font color="red">  (如果绑定QQ已经绑定了账号，会自动解绑。)</font></span>
+                            <span th:if="${currentUser.openId == null || currentUser.openId == ''}">，即可使用QQ帐号登录资源分享网 <font color="red">  (如果绑定QQ已经绑定了账号，会自动解绑。)</font></span>
                         </li>
                     </ul>
                 </div>

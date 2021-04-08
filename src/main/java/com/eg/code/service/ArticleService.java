@@ -83,11 +83,9 @@ public interface ArticleService {
     public Integer noAudit();
 
     /**
-     * 根据用户id查询该用户发表的热门资源
+     *  -根据用户id查询该用户发表的热门资源
      */
-    public Page<Article> list(Integer userId,Integer isHot,Integer page, Integer pageSize, Sort.Direction direction, String... properties);
-
-
+    public Page<Article> list(Integer userId,Integer isHot,Integer state,Integer page, Integer pageSize, Sort.Direction direction, String... properties);
 
     //10条最新资源
     public List<Article> getNewArticle(Integer n);

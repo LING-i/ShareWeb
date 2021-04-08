@@ -4,7 +4,6 @@ import com.eg.code.entity.*;
 import com.eg.code.lucene.ArticleIndex;
 import com.eg.code.service.*;
 import com.eg.code.util.*;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -25,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
@@ -107,7 +107,7 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/login")
-    public Map<String,Object> login(User user, HttpSession session){
+    public Map<String,Object> login(User user, HttpSession session, HttpServletResponse response){
         Map<String,Object> map = new HashMap<>();
 
         if(StringUtil.isEmpty(user.getUserName())){
@@ -147,8 +147,12 @@ public class UserController {
                     s_article.setUseful(false);
                     s_article.setUser(currentUser);   //根据用户名和 false   找失效资源数量
                     session.setAttribute(Consts.UN_USEFUL_ARTICLE_COUNT,articleService.getCount(s_article,null,null,null));
-
                     session.setAttribute(Consts.CURRENT_USER,currentUser);
+
+                    //**将用户的信息写回cookie
+
+
+
                     map.put("success", true);
                 }
             }catch (UnknownAccountException e){
@@ -188,7 +192,7 @@ public class UserController {
         SimpleMailMessage message = new SimpleMailMessage();        //消息构造器
         message.setFrom("413363115@qq.com");                        //发件人
         message.setTo(email);                                       //收件人
-        message.setSubject("Java资源分享网-用户找回密码");           //主题
+        message.setSubject("资源分享网-用户找回密码");           //主题
         message.setText("您本次的验证码是：" +mailCode);            //正文内容
         mailSender.send(message);
         // 验证码缓存到redis中并设置有效期20秒
@@ -744,7 +748,7 @@ public class UserController {
         Page<UserPublish> userPublishPage = userPublishService.list(publishUser.getUserId(),1,Consts.PAGE_SIZE, Sort.Direction.DESC,"publishDate");
 
         //分页查询用户发布的热门资源
-        Page<Article> articleList = articleService.list(publishUser.getUserId(),1,1, Consts.PAGE_SIZE, Sort.Direction.DESC, "publishDate");
+        Page<Article> articleList = articleService.list(publishUser.getUserId(),1,1,1, Consts.PAGE_SIZE, Sort.Direction.DESC, "publishDate");
 
 
         if(userPublishPage.getTotalElements()>0){

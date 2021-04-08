@@ -25,9 +25,10 @@
     </div>
     <div class="layui-form-item" style="margin-bottom: 5px;text-align: left;">
         <div class="layui-input-block">
-            <input type="checkbox" id="rememberMe" name=""rememberMe lay-skin="primary" title="记住密码">
+            <input type="checkbox" id="rememberMe" name="rememberMe" lay-skin="primary" title="记住密码">
         </div>
     </div>
+
     <div class="layui-form-item" style="margin-top: 15px;text-align: center;">
         <button class="layui-btn layui-btn-normal layui-btn-radius" lay-submit="" lay-filter="checkForm" style="width: 300px;">登录</button>
     </div>
@@ -62,7 +63,8 @@
                 success: function (res) {
                     if(res.success){
                         if(rememberMe == 'on'){     //记住密码
-                            $.cookie('user',$("#userName").val().trim()+'-'+$("#password").val().trim(),{expires: 7 }); //7天有效期
+<!--                        $.cookie('user',$("#userName").val().trim()+'-'+$("#password").val().trim(),{expires: 7 }); //7天有效期-->
+                            $.cookie('user', $("#userName").val() == undefined ? '' : $("#userName").val().trim()+'-'+$("#password").val() == undefined ? '' : $("#password").val().trim(),{expires: 7 }); //7天有效期
                         }else{
                             $.cookie('user',null);
                         }
