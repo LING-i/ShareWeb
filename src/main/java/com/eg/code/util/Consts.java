@@ -44,4 +44,8 @@ public class Consts {
 
     //发布资源的用户
     public static final String PUBLISH_USER = "publishUser";
+
+    //cookie 的过期时间
+    public  static final Integer COOKIE_EXPIRE = 604800;//7天
+
 }

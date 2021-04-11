@@ -12,7 +12,7 @@ import java.util.Date;
  * 用户下载实体
  */
 @Entity
-@Table(name="userDownload")
+@Table(name="user_download")
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","hander","fieldHandler"})
 public class UserDownload implements Serializable {
     @Id

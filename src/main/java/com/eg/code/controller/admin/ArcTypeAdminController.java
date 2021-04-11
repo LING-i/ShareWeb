@@ -86,6 +86,7 @@ public class ArcTypeAdminController {
         for(int i =0;i<idsStr.length;i++){
             arcTypeService.delete(Integer.parseInt(idsStr[i]));
         }
+        //删除redis中缓存
         redisTemplate.delete(Consts.ALL_ARC_TYPE_NAME);
         startupRunner.loadData();
         resultMap.put("errorNo",0);

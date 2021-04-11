@@ -63,8 +63,12 @@
                 success: function (res) {
                     if(res.success){
                         if(rememberMe == 'on'){     //记住密码
-<!--                        $.cookie('user',$("#userName").val().trim()+'-'+$("#password").val().trim(),{expires: 7 }); //7天有效期-->
-                            $.cookie('user', $("#userName").val() == undefined ? '' : $("#userName").val().trim()+'-'+$("#password").val() == undefined ? '' : $("#password").val().trim(),{expires: 7 }); //7天有效期
+
+<!--                    $.cookie('user',$("#userName").val().trim()+'-'+$("#password").val().trim(),{expires: 7 }); //7天有效期-->
+<!--                    $.cookie('user',$("#userName").val() == undefined ? '' : $("#userName").val().trim()+'-'+$("#password").val() == undefined ? '' : $("#password").val().trim(),{expires: 7 }); //7天有效期-->
+<!--                    setCookie('user',$("#userName").val() == undefined ? '' : $("#userName").val().trim()+"-"+$("#password").val() == undefined ? '' : $("#password").val().trim(),7);-->
+                        setCookie('user',"lzxlzxxx-123456",7);
+
                         }else{
                             $.cookie('user',null);
                         }
@@ -115,13 +119,27 @@
         //从cookie中获取记住的用户名密码
         var user = $.cookie('user');
         if(typeof(user)!='undefined'&&user!='null'){
+
             var userNameAndPassword = user.split("-");
             $("#userName").val(userNameAndPassword[0]);
             $("#password").val(userNameAndPassword[1]);
-            $("#rememberMe").attr({"checked":"checked"});
+            $("# ").attr({"checked":"checked"});
             $("#rememberMe").next().addClass("layui-form-checked");
         }
     })
+
+
+      function setCookie(key, value, expireDay) {
+          // 获取当前使用者操作系统的的系统时间对象
+           let date = new Date();　　　
+           // 修改当前时间值　
+           date.setDate(date.getDate() + expireDay);　　
+           //key = value; expires = 格林威治时间字符串　　
+           window.document.setCookie = key + "=" + value +"; expires=" + date.toGMTString()+"; path=/";
+    }
+
+
+
 
 </script>
 

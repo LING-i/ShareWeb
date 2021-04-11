@@ -4,6 +4,7 @@ import com.eg.code.entity.UserDownload;
 import com.eg.code.entity.UserPublish;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 /**
@@ -11,8 +12,8 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface UserPublishRepository extends JpaRepository<UserPublish,Integer>, JpaSpecificationExecutor<UserPublish> {
 
-
-    @Query(value ="delete from userPublish where articleId = ?",nativeQuery = true)
+    @Modifying
+    @Query(value ="delete from user_publish where article_id = ?1",nativeQuery = true)
     void deleteByArticleId(int articleId);
 
 }

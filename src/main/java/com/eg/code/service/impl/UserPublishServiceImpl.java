@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -49,8 +50,11 @@ public class UserPublishServiceImpl  implements UserPublishService {
 
     }
 
+
     @Override
     public void deleteByArticleId(int articleId) {
         userPublishRepository.deleteByArticleId(articleId);
     }
+
+
 }

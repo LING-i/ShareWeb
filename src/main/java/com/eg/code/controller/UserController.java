@@ -150,8 +150,7 @@ public class UserController {
                     session.setAttribute(Consts.CURRENT_USER,currentUser);
 
                     //**将用户的信息写回cookie
-
-
+//                    CookieUtil.setCookie(response,user.getUserName(),user.getPassword(),Consts.COOKIE_EXPIRE);
 
                     map.put("success", true);
                 }
