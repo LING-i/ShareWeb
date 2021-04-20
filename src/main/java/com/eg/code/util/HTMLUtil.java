@@ -16,9 +16,9 @@ public class HTMLUtil {
     public static String getArcTypeStr(String type, List<ArcType> arcTypeList){
         StringBuffer arcTypeCode = new StringBuffer();
         if("all".equals(type)){
-            arcTypeCode.append("<li class=\"layui-hide-xs layui-this\"><a href=\"/\">首页</a></li>");
+            arcTypeCode.append("<li class=\"layui-hide-xs layui-this\"><a href=\"/\">全部</a></li>");
         }else{
-            arcTypeCode.append("<li><a href=\"/\">首页</a></li>");
+            arcTypeCode.append("<li><a href=\"/\">全部</a></li>");
         }
         for(ArcType arcType:arcTypeList){
             if(type.equals((arcType.getArcTypeId().toString()))){
@@ -129,10 +129,10 @@ public class HTMLUtil {
                                     "   <div class=\"fly-detail-user\">\n" +
                                     "       <a href='' class='fly-link'>\n" +
                                     "           <cite>"+comment.getUser().getNickname()+"</cite>\n");
-            if(comment.getUser().isVip()){
-                commentCode.append("<i class='iconfont icon-renzheng' title='会员认证'></i>\n" +
-                                    "<i class='layui-badge fly-badge-vip'>VIP" + comment.getUser().getVipGrade() + "</i>\n");
-            }
+//            if(comment.getUser().isVip()){
+//                commentCode.append("<i class='iconfont icon-renzheng' title='会员认证'></i>\n" +
+//                                    "<i class='layui-badge fly-badge-vip'>VIP" + comment.getUser().getVipGrade() + "</i>\n");
+//            }
             commentCode.append("       </a>\n");
             //如果作者和评论者是同一个人，显示作者标识
             if(comment.getUser().getUserId() == comment.getArticle().getUser().getUserId()){

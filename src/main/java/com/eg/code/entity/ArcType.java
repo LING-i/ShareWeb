@@ -1,6 +1,7 @@
 package com.eg.code.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="arcType")
+@Proxy(lazy = false)
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","hander","fieldHandler"})
 public class ArcType implements Serializable {
 

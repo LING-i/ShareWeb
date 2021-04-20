@@ -27,7 +27,7 @@ public class Consts {
     public static final String LINK_LIST = "linkList";
 
     /**页面大小*/
-    public static final Integer PAGE_SIZE = 20;
+    public static final Integer PAGE_SIZE = 13;
 
     //10条最新资源
     public static final String NEW_ARTICLE = "newArticle";

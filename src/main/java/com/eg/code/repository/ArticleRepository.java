@@ -15,9 +15,20 @@ public interface ArticleRepository extends JpaRepository<Article,Integer>, JpaSp
     /**
      * 点击+1
      */
-    @Query(value = "update article set click=click+1 where article_id=?1",nativeQuery = true)
     @Modifying
+    @Query(value = "update article set click=click+1 where article_id=?1",nativeQuery = true)
     public void updateClick(Integer articleId);
+
+
+    /**
+     * 分享 + 1
+     */
+    @Modifying
+    @Query(value = "update article set share=share+1 where article_id=?1",nativeQuery = true)
+    public void updateShare(Integer articleId);
+
+    @Query(value ="select article_id from user_publish where user_id = ?1" ,nativeQuery = true)
+    public List<Integer> articleIdByUserId(int userId);
 
     /**
      * 今日发布资源总数

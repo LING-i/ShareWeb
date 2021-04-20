@@ -1,6 +1,7 @@
 package com.eg.code.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="link")
+@Proxy(lazy = false)
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","hander","fieldHandler"})
 public class Link implements Serializable {
     @Id

@@ -29,10 +29,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -157,7 +154,7 @@ public class UserController {
             }catch (UnknownAccountException e){
                 e.printStackTrace();
                 map.put("success", false);
-                map.put("errorInfo", "用户名错误！");
+                map.put("errorInfo", "用户名不存在！");
             }catch (IncorrectCredentialsException e){
                 e.printStackTrace();
                 map.put("success", false);
@@ -237,8 +234,6 @@ public class UserController {
     }
 
 
-
-
     /**
      * 资源管理
      */
@@ -277,6 +272,14 @@ public class UserController {
     }
 
     /**
+     * 进入资源发布页面没有左菜单
+     */
+    @GetMapping("toAddArticleNoLeft")
+    public String toAddArticleNoLeft(){
+        return "user/addArticleNoLeft";
+    }
+
+    /**
      * 添加或修改资源
      */
     @ResponseBody
@@ -302,6 +305,7 @@ public class UserController {
             }
             article.setState(1);                //未审核状态
             article.setClick(new Random().nextInt(150)+50);         //设置点击数为50~200
+            article.setShare(new Random().nextInt(20)+10);         //设置初始的分享数 10~30
             articleService.save(article);
 
 
@@ -625,7 +629,7 @@ public class UserController {
             //新文件名
             String newFileName = DateUtil.getCurrentDateStr()+suffixName;//当前时间.jpg
             FileUtils.copyInputStreamToFile(file.getInputStream(),new File(imgFilePath+newFileName));
-            System.out.println(imgFilePath);
+            System.out.println(imgFilePath+newFileName);
             map.put("success",true);
             map.put("imgName",newFileName);
             //把头像放到session和数据库
@@ -633,6 +637,14 @@ public class UserController {
             currentUser.setHeadPortrait(newFileName);
             userService.save(currentUser);
             session.setAttribute(Consts.CURRENT_USER,currentUser);
+//
+//            //根据userId 查该用户的所有资源
+//            List<Integer> articleIds = articleService.articlesByUserId(currentUser.getUserId());
+//
+//            //删除缓存，再加载的方式更新缓存。
+//            articleService.updateFromCache(articleIds);
+
+
         }
         return map;
     }

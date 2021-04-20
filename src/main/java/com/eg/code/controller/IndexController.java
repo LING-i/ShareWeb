@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,10 +63,14 @@ public class IndexController {
         mav.setViewName("index");
         //类型的html代码
         List arcTypleList = arcTypeService.listAll(Sort.Direction.ASC,"sort");
+        mav.addObject("arcTypeList",arcTypleList);
+
         mav.addObject("arcTypeStr", HTMLUtil.getArcTypeStr("all",arcTypleList));
+
         //资源列表
         Map<String,Object> map = articleService.list("all",1, Consts.PAGE_SIZE);
         mav.addObject("articleList",map.get("data"));
+
         //分页html代码
         mav.addObject("pageStr",HTMLUtil.getPagation("/article/all",Integer.parseInt(String.valueOf(map.get("count"))),1,"该分类还没有数据..."));
         return mav;

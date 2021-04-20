@@ -76,7 +76,7 @@
                         <p field="points" title="积分" width="90" align="center" templet="#pointsTpl"  />
                         <p field="email" title="邮箱" width="220" align="center" />
                         <p field="latelyLoginTime" title="最近登录" width="180" align="center"/>
-                        <p field="isVip" title="VIP会员" width="140" align="center" templet="#isVipTpl"  />
+<!--                        <p field="isVip" title="管理员" width="140" align="center" templet="#isVipTpl"  />-->
                         <p field="isOff" title="封禁" width="100" align="center" templet="#isOffTpl"  />
                         <p fixed="right" align="center" toolbar="#barDemo" title="操作"/>
                     </div>
@@ -96,7 +96,7 @@
                     <script type="text/html" id="isVipTpl">
                         <input type="checkbox" name="isVip" value="{{d.userId}}" lay-skin="switch" lay-text="是|否" lay-filter="isVip"  {{d.vip == true?'checked':''}}>
                         {{# if(d.vip == true){ }}
-                            <span class="layui-badge layui-bg-orange">{{d.vipGrade}}</span>
+<!--                            <span class="layui-badge layui-bg-orange">{{d.vipGrade}}</span>-->
                         {{# }    }}
                     </script>
                     <script type="text/html" id="isOffTpl">
@@ -105,8 +105,8 @@
                     <script type="text/html" id="barDemo">
                         <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="submit" url="/admin/user/resetPassword" isConfirm="1" confirmMsg="您确定要对用户进行重置密码吗？"
                            inputs="userId:"><i class="layui-icon">&#xe642;</i>重置密码</a>
-                        <a class="layui-btn layui-bg-red layui-btn-xs" lay-event="top" topUrl="/admin/user/vipGrade.html" topMode="add"
-                            topWidth="400px" topHeight="200px" topTitle="修改VIP等级" inputs="userId:"><i class="layui-icon">&#xe642;</i>VIP等级</a>
+<!--                        <a class="layui-btn layui-bg-red layui-btn-xs" lay-event="top" topUrl="/admin/user/vipGrade.html" topMode="add"-->
+<!--                            topWidth="400px" topHeight="200px" topTitle="修改VIP等级" inputs="userId:"><i class="layui-icon">&#xe642;</i>VIP等级</a>-->
                         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="top" topUrl="/admin/user/one.html" topMode="add"
                            topWidth="400px" topHeight="200px" topTitle="积分充值" inputs="userId:"><i class="layui-icon">&#xe642;</i>积分充值</a>
                     </script>

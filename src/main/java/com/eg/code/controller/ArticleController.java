@@ -51,6 +51,7 @@ public class ArticleController {
         mav.setViewName("index");
         //类型的html代码
         List arcTypleList = arcTypeService.listAll(Sort.Direction.ASC,"sort");
+        mav.addObject("arcTypeList",arcTypleList);
         mav.addObject("arcTypeStr", HTMLUtil.getArcTypeStr(type,arcTypleList));
         //资源列表
         Map<String,Object> map = articleService.list(type,currentPage, Consts.PAGE_SIZE);
@@ -81,7 +82,7 @@ public class ArticleController {
         //分页html代码
         int totalPage = articleList.size()%Consts.PAGE_SIZE==0?articleList.size()/Consts.PAGE_SIZE:articleList.size()/Consts.PAGE_SIZE+1;
         String targetUrl = "/article/search?keywords="+keywords;
-        String msg = "没有关键字是 \"<font style=\"border: 0px;color:red;font-weight:bold;padding-left: 3px; padding-right: 3px;\" >" +keywords + "</font>\" 的相关资源，请联系站长！";
+        String msg = "没有关键字是 \"<font style=\"border: 0px;color:red;font-weight:bold;padding-left: 3px; padding-right: 3px;\" >" +keywords + "</font>\" 的相关资源！";
         mav.addObject("pageStr",HTMLUtil.getPagation2(targetUrl,totalPage,page,msg));
         return mav;
     }
@@ -112,6 +113,18 @@ public class ArticleController {
         mav.setViewName("detail");
         return mav;
     }
+
+    /**
+     * 分享数 + 1
+     */
+    @RequestMapping("/share")
+    public void share(Integer articleId){
+        //分享数 + 1
+        articleService.updateShare(articleId);
+
+    }
+
+
 
     /**
      * 判断资源是否免费

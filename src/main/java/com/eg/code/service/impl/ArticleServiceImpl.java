@@ -225,7 +225,38 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+    @Override
+    public void updateShare(Integer articleId) {
+        //更新了资源的分享数
+        articleRepository.updateShare(articleId);
+        Article article = articleRepository.getOne(articleId);
+        if(article.getState()==2) {          //把审核通过的资源放到redis
+            redisTemplate.setKeySerializer(redisSerializer);
+            redisTemplate.opsForValue().set("article_" + article.getArticleId(), article);
+        }
+    }
 
+
+    @Override
+    public void updateFromCache(List<Integer> articleIds) {
+
+        for (Integer articleId : articleIds) {
+            redisTemplate.delete("article_"+articleId);
+        }
+        for(Integer articleId : articleIds){
+            Article one = articleRepository.getOne(articleId);
+            redisTemplate.setKeySerializer(redisSerializer);
+            redisTemplate.opsForValue().set("article_"+one.getArticleId(),one);//把审核通过的资源放到redis
+        }
+        startupRunner.loadData();
+    }
+
+
+    @Override
+    public List<Integer> articlesByUserId(Integer userId) {
+        List<Integer> integers = articleRepository.articleIdByUserId(userId);
+        return integers;
+    }
 
     //查找用户的热门资源
     @Override

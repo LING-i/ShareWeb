@@ -2,6 +2,7 @@ package com.eg.code.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Proxy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="user_download")
+@Proxy(lazy = false)
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","hander","fieldHandler"})
 public class UserDownload implements Serializable {
     @Id

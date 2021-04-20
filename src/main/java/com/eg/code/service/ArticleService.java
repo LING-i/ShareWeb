@@ -73,6 +73,23 @@ public interface ArticleService {
     public void updateClick(Integer articleId);
 
     /**
+     * 从缓存中更新对应的article
+     */
+    public void updateFromCache(List<Integer> articleIds);
+
+    /**
+     * 分项数 + 1
+     * @param articleId
+     */
+    public void updateShare(Integer articleId);
+
+    /**
+     * 根据用户id 查询 article
+     */
+    public List<Integer> articlesByUserId(Integer userId);
+
+
+    /**
      * 今日发布资源总数
      */
     public Integer todayPublish();

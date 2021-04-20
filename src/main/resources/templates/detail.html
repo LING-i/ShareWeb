@@ -34,33 +34,41 @@
                     <span class="layui-badge layui-bg-black" th:text="${article.arcType.arcTypeName}">资源类别</span>
                     <span th:if="${article.free == true}" class="layui-badge layui-bg-black">免费资源</span>
                      <!-- 改动-->
-                    <span><button id="shareBtn" type="button" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius"><i class="layui-icon layui-icon-tread"> &#xe641;</i></button><span th:text="${article.share}"></span></span>
+                    <span style="position: absolute;right: 60px"><button id="shareBtn" style="border: 0px;margin-right: -10px" type="button" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius"><i class="layui-icon layui-icon-tread" title="分享"> &#xe641;</i></button><span th:text="${article.share}" style="font-size: 16px"></span></span>
                     <span class="fly-list-nums"><i class="iconfont" title="点击">&#xe60b</i><span th:text="${article.click}"></span> </span>
                 </div>
-                <div class="detail-about">
-                    <a class="fly-avatar">
-                        <img th:src="'/static/img/' + ${article.user.headPortrait}" th:alt="${article.user.nickname}">
-                    </a>
-                    <div th:if="${article.useful == true}" style="float:right;" class="layui-hide-xs">
-                        <button class="layui-btn layui-btn-radius layui-btn-warm" onclick="download()">&nbsp;&nbsp;立即下载&nbsp;&nbsp;</button>
-                        <button class="layui-btn layui-btn-radius" style="background-color:red;" onclick="vipDownload()">&nbsp;&nbsp;VIP免积分下载&nbsp;&nbsp;</button>
+<!--                <div class="detail-about">-->
+<!--                    <a class="fly-avatar">-->
+<!--                        <img th:src=" '../static/static/img/' + ${article.user.headPortrait}" th:alt="${article.user.nickname}">-->
+<!--                    </a>-->
+                    <div th:if="${article.useful == true}" style="float: right;" class="layui-hide-xs">
+                        <button class="layui-btn layui-btn-radius layui-btn-warm layui-btn-sm" onclick="download()">&nbsp;&nbsp;立即下载&nbsp;&nbsp;</button>
+<!--                        <button class="layui-btn layui-btn-radius" style="background-color:red;" onclick="vipDownload()">&nbsp;&nbsp;VIP免积分下载&nbsp;&nbsp;</button>-->
                     </div>
                     <div th:if="${article.useful == false}" style="float:right;" class="layui-hide-xs">
                         <font color="red">该资源链接已失效，暂时无法提供下载。</font>
                     </div>
-                    <div class="fly-detail-user">
+                    <div class="fly-detail-user" >
                         <a class="fly-link">
                             <cite th:text="${article.user.nickname}">作者</cite>
-                            <i th:if="${article.user.vip == true}" class="iconfont icon-renzheng" title="会员认证"></i>
-                            <i th:if="${article.user.vip == true}" class="layui-badge fly-badge-vip" th:text="'VIP'+${article.user.vipGrade}">VIP</i>
+<!--                            <i th:if="${article.user.vip == true}" class="iconfont icon-renzheng" title="会员认证"></i>-->
+<!--                            <i th:if="${article.user.vip == true}" class="layui-badge fly-badge-vip" th:text="'VIP'+${article.user.vipGrade}">VIP</i>-->
                         </a>
-                        <span th:text="${#dates.format(article.publishDate,'yyyy-MM-dd HH:mm')}" ></span>
-                        <div class="detail-hits">
-                            <span style="padding-right:10px; color:#FF7200" th:text="'所需：' + ${article.points} + '积分'"></span>
-                        </div>
+                        <span th:text="${#dates.format(article.publishDate,'yyyy-MM-dd')}" ></span>
+<!--                        <div class="detail-hits">-->
+<!--                            <span style="padding-right:10px; color:#FF7200" th:text="'所需：' + ${article.points} + '积分'"></span>-->
+                            <span><i class="layui-icon" style="font-size: 10px;color: #FF4040;">&#xe735;</i>
+                                  <span style="font-size: 10px;color: #FF4040;" th:text="${article.points}"></span></span>
+<!--                        </div>-->
                     </div>
+                    <br>
+                    <hr>
                     <div class="detail-body photos" th:utext="${article.content}"></div>
-                </div>
+<!--                </div>-->
+
+
+
+
             </div>
             <div class="fly-panel detail-box" id="flyReply">
                 <fieldset class="layui-elem-field layui-field-title" style="text-align: center;"><legend>评论</legend></fieldset>
@@ -81,30 +89,31 @@
         </div>
 
         <div class="layui-col-md3">
-            <div class="fly-panel">
-                <h3 class="fly-panel-title">下载排行</h3>
-                <ul class="fly-panel-main fly-list-static">
-                    <li th:each="article : ${application.clickArticle}">
-                        <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
-                    </li>
-                </ul>
-            </div>
-
             <dl class="fly-panel fly-list-one">
-                <dt class="fly-panel-title">热搜排行</dt>
+                <dt class="fly-panel-title">综合排行</dt>
                 <dd th:each="article : ${application.randomArticle}">
                     <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
                     <span><i class="iconfont" title="人气">&#xe60b;</i><span th:text="${article.click}"></span> </span>
                 </dd>
             </dl>
 
+
             <dl class="fly-panel fly-list-one">
-                <dt class="fly-panel-title">相似资源</dt>
-                <dd th:each="article : ${similarityArticleList}">
+                <dt class="fly-panel-title">点击量排行</dt>
+                <dd th:each="article : ${application.clickArticle}">
                     <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
                     <span><i class="iconfont" title="人气">&#xe60b;</i><span th:text="${article.click}"></span> </span>
                 </dd>
-                <div th:if="${similarityArticleList == null}" class="fly-none">没有相关数据</div>
+            </dl>
+
+
+
+            <dl class="fly-panel fly-list-one">
+                <dt class="fly-panel-title">最新排行</dt>
+                <dd th:each="article : ${application.newArticle}">
+                    <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
+                    <span><i class="iconfont" title="人气">&#xe60b;</i><span th:text="${article.click}"></span> </span>
+                </dd>
             </dl>
         </div>
 
@@ -265,7 +274,6 @@
             layer.msg("登陆后才能下载资源！");
             return;
         }
-
         $.post("/user/isVip",{},function (result) {
             if(result){
                 //判断是否下载过
@@ -326,7 +334,8 @@
                 return;
             }
                 qqShare();//qq分享
-
+                //分享数 + 1 的接口
+                $.post("/article/share",{"articleId":[[${article.articleId}]]},function () { });
         });
      });
 
@@ -347,7 +356,9 @@
                 "&title=" + title +
                 "&summary=" + summary +
                 "&pics=" + pics;
-            window.open (urlPath);
+             var shareWin =  window.open(urlPath,"_blank","width=500,height=500,top=200,left=500");
+
+
         }
 
 </script>

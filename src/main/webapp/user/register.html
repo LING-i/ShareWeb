@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/static/layui/css/layui.css"/>
     <script src="/static/fsLayui/plugins/jquery/jquery.min.js"></script>
 </head>
-<body style="height: 300px;">
+<body style="height: 300px">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>用户注册</legend>
     </fieldset>
@@ -15,27 +15,34 @@
         <div class="layui-form-item" style="margin-bottom: 5px;">
             <label class="layui-form-label">用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
             <div class="layui-input-inline">
-                <input type="text" name="userName" required="true" placeholder="请输入用户名" lay-verify="userName" autocomplete="off" class="layui-input" style="width: 280px;"/>
+                <input type="text" name="userName" id="username" required="true" placeholder="5到15位，且不能出现空格" lay-verify="userName" autocomplete="off" class="layui-input" style="width: 280px;"/>
             </div>
         </div>
         <!--密码-->
         <div class="layui-form-item" style="margin-bottom: 5px;">
             <label class="layui-form-label">密&nbsp;&nbsp;码</label>
             <div class="layui-input-inline">
-                <input type="password" name="password" required="true" placeholder="请输入密码" lay-verify="password" autocomplete="off" class="layui-input" style="width: 280px;"/>
+                <input type="password" id="pwd" name="password" required="true" placeholder="6到18位，且不能出现空格" lay-verify="password" autocomplete="off" class="layui-input" style="width: 280px;"/>
             </div>
         </div>
+        <!--确认密码-->
+<!--        <div class="layui-form-item" style="margin-bottom: 5px;">-->
+<!--            <label class="layui-form-label">确认密码</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                 <span id="tishi"><input type="password" id="pwdAgain" name="passwordAgain" onkeyup="validate()" required="true" placeholder="6到18位，且不能出现空格" lay-verify="password" autocomplete="off" class="layui-input" style="width: 280px;"/></span>-->
+<!--            </div>-->
+<!--        </div>-->
         <!--昵称-->
         <div class="layui-form-item" style="margin-bottom: 5px;">
             <label class="layui-form-label">昵&nbsp;&nbsp;称</label>
             <div class="layui-input-inline">
-                <input type="text" name="nickname" required="true" placeholder="请输入昵称" lay-verify="nickname" autocomplete="off" class="layui-input" style="width: 280px;"/>
+                <input type="text" id="nickname" name="nickname" required="true" placeholder="1到10位，且不能出现空格" lay-verify="nickname" autocomplete="off" class="layui-input" style="width: 280px;"/>
             </div>
         </div>
         <div class="layui-form-item" style="margin-bottom: 5px;">
             <label class="layui-form-label">邮&nbsp;&nbsp;箱</label>
             <div class="layui-input-inline">
-                <input type="text" name="email" required="true" placeholder="请输入邮箱（用于找回密码）" autocomplete="off" class="layui-input" style="width: 280px;"/>
+                <input type="text" id="email" name="email" required="true" placeholder="请输入邮箱（用于找回密码）" autocomplete="off" class="layui-input" style="width: 280px;"/>
             </div>
         </div>
         <div class="layui-form-item" style="margin-bottom: 5px;text-align: left;">
@@ -46,6 +53,7 @@
         <div class="layui-form-item" style="margin-top: 15px;text-align: center;">
             <button class="layui-btn layui-btn-normal layui-btn-radius" lay-submit="" lay-filter="checkForm" style="width: 300px;">注册</button>
         </div>
+
     </form>
 
     <script src="/static/layui/layui.js"></script>
@@ -101,6 +109,27 @@
         });
 
     </script>
+
+<!--<script type="text/javascript">-->
+
+<!--    function validate(){-->
+
+<!--        var pwd = $("#pwd").val();-->
+<!--        var pwdAgain = $("#pwdAgain").val();-->
+<!--    //    对比密码-->
+<!--        if(pwd == pwdAgain){-->
+<!--            //相同-->
+<!--            console.log("相等！");-->
+<!--            $("#tishi").html().append("<img src=\"static/img/tou.jpg\" width=\"20px\" height=\"20px\">");-->
+<!--            $("button").removeAttr("disabled");-->
+<!--        }else{-->
+<!--            console.log("不相等！");-->
+<!--            $("#tishi").html().append("<img src=\"static/img/tou.jpg\" width=\"20px\" height=\"20px\">");-->
+<!--            $("button").attr("disabled","disabled");-->
+<!--        }-->
+<!--    }-->
+
+<!--</script>-->
 
 </body>
 </html>

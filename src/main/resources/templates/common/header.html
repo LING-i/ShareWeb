@@ -1,17 +1,24 @@
-<div class="fly-header layui-bg-black" id="h">
-    <div class="layui-container">
-    <!--        <a class="fly-logo" href="/">-->
-    <!--            <img src="/static/foreground/images/logo.png" style="width: 140px;height: 50px;" alt="Java攀登网">-->
-    <!--        </a>-->
-    <!--        <ul class="layui-nav fly-nav layui-hide-xs">-->
-    <!--            <li class="layui-nav-item">-->
-    <!--                <a href="/buyVIP"><i class="iconfont icon-kiss"></i>充值积分 </a>-->
-    <!--            </li>-->
-    <!--            <li class="layui-nav-item">-->
-    <!--                <a href="/fbzyzjf"><i class="iconfont icon-jifen"></i>发布资源赚积分 </a>-->
-    <!--            </li>-->
-    <!--        </ul>-->
-</div>
+    <div class="fly-header layui-bg-black" id="h" >
+<!--            <div class="layui-container">-->
+<!--                <a class="fly-logo" href="/">-->
+<!--&lt;!&ndash;                    <img src="/static/foreground/images/logo.png" style="width: 140px;height: 50px;" alt="Java攀登网">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <i class="layui-icon" style="font-size: 40px">&#xe6af;</i>发布资源赚积分&ndash;&gt;-->
+<!--                </a>-->
+
+                <ul class="layui-nav fly-nav layui-hide-xs">
+                    <li class="layui-nav-item">
+                        <a href="/"><i class="layui-icon">&#xe68e;</i>首页</a>
+                    </li>
+                    <li class="layui-nav-item">
+<!--                        <a href="/user/toAddArticleNoLeft" id="toAddArticleNoLeft"><i class="layui-icon">&#xe642;</i>发布资源 </a>-->
+                        <a href="#" id="toAddArticleNoLeft" ><i class="layui-icon">&#xe642;</i>发布资源 </a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="/fbzyzjf"><i class="iconfont icon-jifen"></i>我的收藏 </a>
+                    </li>
+                </ul>
+<!--        </div>-->
+
 
     <!-- 未登录状态 -->
     <ul th:if="${session.currentUser == null}" class="layui-nav fly-nav-user">
@@ -32,13 +39,15 @@
 
     <!-- 登录后的状态 -->
     <ul th:if="${session.currentUser != null}" class="layui-nav fly-nav-user">
-        <li id="loginLi" class="layui-nav-item" style="height: 65px;">
+        <li id="loginLi" class="layui-nav-item" style="height: 65px;margin-right: 20px">
             <a class="fly-nav-avatar">
+                你好！
                 <cite class="layui-hide-xs" th:utext="${session.currentUser.nickname}">...</cite>
-                <i th:if="${session.currentUser.vip==true}" class="iconfont icon-renzheng layui-hide-xs" title="会员认证"></i>
-                <i th:if="${session.currentUser.vip==true}" class="layui-badge fly-badge-vip layui-hide-xs" th:text="'VIP'+${session.currentUser.vipGrade}">VIP</i>
+<!--                <i th:if="${session.currentUser.vip==true}" class="iconfont icon-renzheng layui-hide-xs" title="会员认证"></i>-->
+<!--                <i th:if="${session.currentUser.vip==true}" class="layui-badge fly-badge-vip layui-hide-xs" th:text="'VIP'+${session.currentUser.vipGrade}">VIP</i>-->
                 <span th:if="${session.unUsefulArticleCount > 0 || session.currentUser.messageCount > 0}" style="top: 28px;" class="layui-badge-dot"></span>
-                <img id="titleHeadPortrait" th:src="'/static/img/'+${session.currentUser.headPortrait}">
+                <img id="titleHeadPortrait"  th:src="'/static/img/'+${session.currentUser.headPortrait}">
+
             </a>
 
             <dl class="layui-nav-child layui-anim layui-anim-scale">
@@ -49,11 +58,15 @@
                 <dd><a href="/user/toHaveDownloaded/1"><i class="layui-icon" style="margin-left: 2px;font-size: 22px;">&#xe857;</i>已下载资源</a> </dd>
                 <dd><a href="/user/toFavorites/1"><i class="layui-icon" style="margin-left: 2px;font-size: 22px;">&#xe600;</i>我的收藏</a> </dd>
                 <hr style="margin: 5px 0;">
-                <dd><a href="/buyVIP"><i class="layui-icon" style="margin-left: 2px;font-size: 22px;">&#xe735;</i>升级为VIP</a> </dd>
-                <dd><a href="javascript:userLogout()" style="text-align: center;">退出</a> </dd>
+                <dd><a href="/user/toAddArticleNoLeft"><i class="layui-icon" style="margin-left: 2px;font-size: 22px;">&#xe642;</i>发布资源</a> </dd>
+<!--                <dd><a href="/buyVIP"><i class="layui-icon" style="margin-left: 2px;font-size: 22px;">&#xe735;</i>升级为VIP</a> </dd>-->
+                <dd><a href="javascript:userLogout()"><i class="layui-icon" style="margin-left: 2px;font-size: 22px;">&#xe625;</i>退出</a> </dd>
             </dl>
         </li>
 
     </ul>
 
 </div>
+
+
+

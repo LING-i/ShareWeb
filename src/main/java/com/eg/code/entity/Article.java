@@ -2,6 +2,7 @@ package com.eg.code.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Proxy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="article")
+@Proxy(lazy = false)
 @JsonIgnoreProperties(value={"hibernateLazyInitializer","hander","fieldHandler"})
 public class Article implements Serializable {
 
@@ -68,6 +70,8 @@ public class Article implements Serializable {
     private Date checkDate;      //审核时间
 
     private Integer click;          //点击数
+
+    private Integer share;          //分享数
 
     @Column(length = 200)
     private String keywords;        //关键字
@@ -211,6 +215,14 @@ public class Article implements Serializable {
 
     public void setClick(Integer click) {
         this.click = click;
+    }
+
+    public Integer getShare() {
+        return share;
+    }
+
+    public void setShare(Integer share) {
+        this.share = share;
     }
 
     public String getKeywords() {
