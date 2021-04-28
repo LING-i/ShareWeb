@@ -73,12 +73,15 @@ public class ArticleController {
         mav.setViewName("index");
         //类型的html代码
         List arcTypleList = arcTypeService.listAll(Sort.Direction.ASC,"sort");
-        mav.addObject("arcTypeStr", HTMLUtil.getArcTypeStr("all",arcTypleList));
-        //资源列表
+        mav.addObject("arcTypeList",arcTypleList);
+
+        //根据关键词查找资源
         List<Article> articleList = articleIndex.search(keywords);
         Integer toIndex = articleList.size()>=page*Consts.PAGE_SIZE?page*Consts.PAGE_SIZE:articleList.size();
+
         mav.addObject("articleList",articleList.subList((page-1)*Consts.PAGE_SIZE,toIndex));
         mav.addObject("keywords",keywords);
+
         //分页html代码
         int totalPage = articleList.size()%Consts.PAGE_SIZE==0?articleList.size()/Consts.PAGE_SIZE:articleList.size()/Consts.PAGE_SIZE+1;
         String targetUrl = "/article/search?keywords="+keywords;
@@ -102,7 +105,7 @@ public class ArticleController {
         mav.addObject("article",article);
         //类型的html代码
         List arcTypleList = arcTypeService.listAll(Sort.Direction.ASC,"sort");
-        mav.addObject("arcTypeStr", HTMLUtil.getArcTypeStr(article.getArcType().getArcTypeId().toString(),arcTypleList));
+        mav.addObject("arcTypeList",arcTypleList);
 
         //通过lucene分词查找相似资源
         List<Article> articleList = articleIndex.searchNoHighLighter(article.getName().replace("视频","").replace("教程","")

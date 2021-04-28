@@ -13,19 +13,23 @@
 </head>
 <body>
 <div th:replace="common/header::#h"></div>
-<div class="fly-panel fly-column" style="height: auto;">
-    <div class="layui-container">
-        <ul class="layui-clear" th:utext="${arcTypeStr}"></ul>
-    </div>
-</div>
-
-
 
 <div class="layui-container">
     <div class="layui-row layui-col-space15">
 
+        <div class="fly-panel fly-column" style="margin-top: 30px;margin-bottom: 5px;border-radius:10px;padding-left: 10px;height: auto;" >
+            <div class="layui-container" style="">
+                <ul class="layui-clear" id="arcUL" >
+                    <li class="layui-hide-xs layui-this"><a href="/">全部</a></li>
+                    <li th:each="arcTpye :${arcTypeList}">
+                        <a th:href="@{'/article/'+${arcTpye.arcTypeId}+'/1' }"  th:utext="${arcTpye.arcTypeName}"></a>
+                    </li>
+                    <li id="moreId" class="layui-hide-xs layui-this"><i class="layui-icon" style="font-size: 15px; color: black;">&#xe61a;</i></li>
+                </ul>
+            </div>
+        </div>
 
-        <div class="layui-col-md8">
+        <div class="layui-col-md9">
             <div class="fly-panel detail-box">
                 <h1 th:text="${article.name}"></h1>
                 <div class="fly-detail-info">
@@ -89,7 +93,7 @@
         </div>
 
         <div class="layui-col-md3">
-            <dl class="fly-panel fly-list-one">
+            <dl class="fly-panel fly-list-one" id="paihangDL1">
                 <dt class="fly-panel-title">综合排行</dt>
                 <dd th:each="article : ${application.randomArticle}">
                     <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
@@ -98,7 +102,7 @@
             </dl>
 
 
-            <dl class="fly-panel fly-list-one">
+            <dl class="fly-panel fly-list-one" id="paihangDL2">
                 <dt class="fly-panel-title">点击量排行</dt>
                 <dd th:each="article : ${application.clickArticle}">
                     <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
@@ -108,7 +112,7 @@
 
 
 
-            <dl class="fly-panel fly-list-one">
+            <dl class="fly-panel fly-list-one" id="paihangDL3">
                 <dt class="fly-panel-title">最新排行</dt>
                 <dd th:each="article : ${application.newArticle}">
                     <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
@@ -152,7 +156,7 @@
 
             //判断是否下载过
             $.post("/user/userDownloadExist",{"articleId":[[${article.articleId}]]},function (result) {
-                if(result) {         //下载过
+                if(true) {         //下载过
                     var content = $.trim(layedit.getText(index));
                     if(content==''){
                         layer.msg("请输入评论信息！");
@@ -363,6 +367,46 @@
 
 </script>
 
+<script type="text/javascript">
+
+    $(function (){
+
+        $("#paihangDL1  dd").eq(0).find('a').before("<img src= '/static/img/one.png' width='20px' height='20px'>");
+        $("#paihangDL1 dd").eq(1).find('a').before("<img src= '/static/img/two.png' width='20px' height='20px'>");
+        $("#paihangDL1 dd").eq(2).find('a').before("<img src= '/static/img/third.png' width='20px' height='20px'>");
+        $("#paihangDL1 dd:gt(2)").css("margin-left","30px");
+
+        $("#paihangDL2  dd").eq(0).find('a').before("<img src= '/static/img/one.png' width='20px' height='20px'>");
+        $("#paihangDL2 dd").eq(1).find('a').before("<img src= '/static/img/two.png' width='20px' height='20px'>");
+        $("#paihangDL2 dd").eq(2).find('a').before("<img src= '/static/img/third.png' width='20px' height='20px'>");
+        $("#paihangDL2 dd:gt(2)").css("margin-left","30px");
+
+        $("#paihangDL3  dd").eq(0).find('a').before("<img src= '/static/img/one.png' width='20px' height='20px'>");
+        $("#paihangDL3 dd").eq(1).find('a').before("<img src= '/static/img/two.png' width='20px' height='20px'>");
+        $("#paihangDL3 dd").eq(2).find('a').before("<img src= '/static/img/third.png' width='20px' height='20px'>");
+        $("#paihangDL3 dd:gt(2)").css("margin-left","30px");
+
+    });
+</script>
+
+
+<script type="text/javascript">
+    // lt 大于12
+    //gt 小于12
+    $(function (){
+        $("#arcUL li:gt(8):not(:last)").hide();
+
+        $("#moreId").click(function (){
+            $("#arcUL li:gt(8):not(:last)").toggle();
+            if( $("#arcUL li:gt(8):not(:last)").is(":hidden")){
+                $("#moreId").html("  <i class=\"layui-icon\" style=\"font-size: 15px; color: black;\">&#xe61a;</i>");
+            }else{
+                $("#moreId").html("  <i class=\"layui-icon\" style=\"font-size: 15px; color: black;\">&#xe619;</i>");
+            }
+            return false;
+        });
+    });
+</script>
 
 </body>
 </html>

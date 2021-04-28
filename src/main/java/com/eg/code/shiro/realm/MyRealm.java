@@ -42,7 +42,8 @@ public class MyRealm extends AuthorizingRealm {
             roles.add("管理员");
             info.addStringPermission("进入管理员主页");
             info.addStringPermission("根据id查询资源类型实体");
-            info.addStringPermission("添加或修改资源类型信息");
+            info.addStringPermission("添加资源类型信息");
+            info.addStringPermission("修改资源类型信息");
             info.addStringPermission("删除资源类型信息");
             info.addStringPermission("分页查询资源信息列表");
             info.addStringPermission("删除资源");
@@ -66,6 +67,7 @@ public class MyRealm extends AuthorizingRealm {
             info.addStringPermission("安全退出");
             info.addStringPermission("修改热门资源状态");
             info.addStringPermission("修改免费资源状态");
+            info.addStringPermission("加载图表数据");
 
         }
         info.setRoles(roles);

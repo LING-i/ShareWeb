@@ -30,10 +30,10 @@
 
         <div class="layui-col-md9" >
             <div class="fly-panel" style="margin-bottom: 0;">
-                <ul class="fly-list">
+                <ul class="fly-list" >
                     <li th:each="article :${articleList}">
                         <a class="fly-avatar" th:href="@{'/user/toPublishHome/'+${article.articleId} }" target="_blank">
-                            <img th:src= " '/static/img/'+${article.user.headPortrait}" th:alt="${article.user.nickname}">
+                            <img th:src= "'/static/img/'+${article.user.headPortrait}" th:alt="${article.user.nickname}">
                         </a>
                         <h2>
                             <a class="layui-badge" th:text="${article.arcType.arcTypeName}"></a>
@@ -86,27 +86,24 @@
 <!--                </ul>-->
 <!--            </div>-->
 
-            <dl class="fly-panel fly-list-one">
-                <dt class="fly-panel-title">综合排行</dt>
+            <dl class="fly-panel fly-list-one" id="paihangDL1">
+                <dt class="fly-panel-title" ><span>综合排行<img th:src= "'/static/img/paihang.png'" width="20px" height="20px"></span></dt>
                 <dd th:each="article : ${application.randomArticle}">
                     <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
                     <span><i class="iconfont" title="人气">&#xe60b;</i><span th:text="${article.click}"></span> </span>
                 </dd>
             </dl>
 
-
-            <dl class="fly-panel fly-list-one">
-                <dt class="fly-panel-title">点击量排行</dt>
+            <dl class="fly-panel fly-list-one" id="paihangDL2">
+                <dt class="fly-panel-title"><span>点击量排行<img th:src= "'/static/img/paihang.png'" width="20px" height="20px"></span></dt>
                 <dd th:each="article : ${application.clickArticle}">
-                    <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
+                    <a  th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
                     <span><i class="iconfont" title="人气">&#xe60b;</i><span th:text="${article.click}"></span> </span>
                 </dd>
             </dl>
 
-
-
-            <dl class="fly-panel fly-list-one">
-                <dt class="fly-panel-title">最新排行</dt>
+            <dl class="fly-panel fly-list-one" id="paihangDL3">
+                <dt class="fly-panel-title"><span>最新排行<img th:src= "'/static/img/paihang.png'" width="20px" height="20px"></span></dt>
                 <dd th:each="article : ${application.newArticle}">
                     <a th:href="@{'/article/detail/'+${article.articleId}+'.html'}" target="_blank" th:text="${article.name}"></a>
                     <span><i class="iconfont" title="人气">&#xe60b;</i><span th:text="${article.click}"></span> </span>
@@ -188,6 +185,28 @@
             }
             return false;
         });
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(function (){
+
+      $("#paihangDL1  dd").eq(0).find('a').before("<img src= '/static/img/one.png' width='20px' height='20px'>");
+      $("#paihangDL1 dd").eq(1).find('a').before("<img src= '/static/img/two.png' width='20px' height='20px'>");
+      $("#paihangDL1 dd").eq(2).find('a').before("<img src= '/static/img/third.png' width='20px' height='20px'>");
+      $("#paihangDL1 dd:gt(2)").css("margin-left","30px");
+
+      $("#paihangDL2  dd").eq(0).find('a').before("<img src= '/static/img/one.png' width='20px' height='20px'>");
+      $("#paihangDL2 dd").eq(1).find('a').before("<img src= '/static/img/two.png' width='20px' height='20px'>");
+      $("#paihangDL2 dd").eq(2).find('a').before("<img src= '/static/img/third.png' width='20px' height='20px'>");
+      $("#paihangDL2 dd:gt(2)").css("margin-left","30px");
+
+      $("#paihangDL3  dd").eq(0).find('a').before("<img src= '/static/img/one.png' width='20px' height='20px'>");
+      $("#paihangDL3 dd").eq(1).find('a').before("<img src= '/static/img/two.png' width='20px' height='20px'>");
+      $("#paihangDL3 dd").eq(2).find('a').before("<img src= '/static/img/third.png' width='20px' height='20px'>");
+      $("#paihangDL3 dd:gt(2)").css("margin-left","30px");
+
     });
 </script>
 

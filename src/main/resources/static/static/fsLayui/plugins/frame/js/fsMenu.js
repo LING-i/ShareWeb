@@ -27,7 +27,7 @@ layui.define(['element',"fsConfig","fsCommon"], function(exports){
 				{"menuId":"arcTypeid","menuName":"资源类型管理","menuIcon":"&#xe63c;","menuHref":"/admin/arcType/index.html","parentMenuId":"11"},
 				{"menuId":"userid","menuName":"用户管理","menuIcon":"&#xe63c;","menuHref":"/admin/user/index.html","parentMenuId":"11"},
                 {"menuId":"commentid","menuName":"评论管理","menuIcon":"&#xe63c;","menuHref":"/admin/comment/index.html","parentMenuId":"11"},
-				{"menuId":"linkid","menuName":"友情链接管理","menuIcon":"&#xe63c;","menuHref":"/admin/link/index.html","parentMenuId":"11"}
+				// {"menuId":"linkid","menuName":"友情链接管理","menuIcon":"&#xe63c;","menuHref":"/admin/link/index.html","parentMenuId":"11"}
 		 ] //本地数据
 	};
 

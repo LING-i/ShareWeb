@@ -64,16 +64,38 @@ public class ArcTypeAdminController {
     }
 
     /**
-     * 添加或修改资源类型信息
+     * 添加资源类型信息
      */
     @RequestMapping("/save")
-    @RequiresPermissions(value = "添加或修改资源类型信息")
+    @RequiresPermissions(value = "添加资源类型信息")
     public Map<String,Object> save(ArcType arcType){
         Map<String, Object> resultMap = new HashMap<>();
-        arcTypeService.save(arcType);
-        resultMap.put("errorNo",0);
+        ArcType type = arcTypeService.getByName(arcType.getArcTypeName());
+        if(type == null){
+            arcTypeService.save(arcType);
+            resultMap.put("errorNo",0);
+        }else{
+            resultMap.put("errorInfo","该资源类型已经存在!");
+        }
         return resultMap;
     }
+
+
+    /**
+     * 修改资源类型信息
+     */
+    @RequestMapping("/edit")
+    @RequiresPermissions(value = "修改资源类型信息")
+    public Map<String,Object> edit(ArcType arcType){
+        Map<String, Object> resultMap = new HashMap<>();
+            arcTypeService.save(arcType);
+            resultMap.put("errorNo",0);
+        return resultMap;
+    }
+
+
+
+
 
     /**
      * 批量删除资源类型

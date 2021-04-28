@@ -64,6 +64,9 @@ public class UserController {
     private UserPublishService userPublishService;
 
     @Autowired
+    private historyLoginService loginService;
+
+    @Autowired
     private RedisTemplate<Object,Object> redisTemplate;//redis
 
     @Value("${imgFilePath}")
@@ -132,6 +135,16 @@ public class UserController {
                     map.put("errorInfo", "该用户已封禁，请联系管理员！");
                     subject.logout();
                 } else {
+
+                    //成功登录--查询今日登录数
+                    String date = DateUtil.formatDate(new Date(), "yyyy-MM-dd");
+                    if(null == loginService.selectLogin(date)){
+                        historyLogin historyLogin = new historyLogin(date,1);
+                        loginService.addLogin(historyLogin);
+                    }else{
+                        loginService.update(date);
+                    }
+
                     currentUser.setLatelyLoginTime(new Date());
                     userService.save(currentUser);
 
