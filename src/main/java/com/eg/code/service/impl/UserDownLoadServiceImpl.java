@@ -43,6 +43,9 @@ public class UserDownLoadServiceImpl implements UserDownloadService {
         }, PageRequest.of(page-1,pageSize,direction,properties));
     }
 
+
+
+
     @Override
     public Long getCount(Integer userId) {
         return userDownRepository.count(new Specification<UserDownload>() {

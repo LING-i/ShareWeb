@@ -55,6 +55,9 @@ public class UserController {
     private UserDownloadService userDownloadService;
 
     @Autowired
+    private UserFavoritesService userFavoritesService;
+
+    @Autowired
     private CommentService commentService;
 
     @Autowired
@@ -309,6 +312,8 @@ public class UserController {
             resultMap.put("erroInfo","百度云分享链接已经失效，请重新发布！");
             return resultMap;
         }
+
+
         User currentUser = (User)session.getAttribute(Consts.CURRENT_USER);
         if(article.getArticleId()==null){               //添加资源
             article.setPublishDate(new Date());
@@ -579,10 +584,67 @@ public class UserController {
         Page<UserDownload> page = userDownloadService.list(currentUser.getUserId(),currentPage,Consts.PAGE_SIZE, Sort.Direction.DESC,"downloadDate");
         mav.addObject("userDownloadList",page.getContent());
         //分页html代码
-        mav.addObject("pageStr", HTMLUtil.getPagation("/user/toHaveDownloaded",page.getTotalPages(),currentPage,"没有下载任何资源。。。"));
+        mav.addObject("pageStr", HTMLUtil.getPagation("/user/toHaveDownloaded",page.getTotalPages(),currentPage,"没有下载任何资源"));
         mav.setViewName("user/haveDownloaded");
         return mav;
     }
+
+    /**
+     * 用户收藏展示
+     * @param currentPage
+     * @param session
+     * @return
+     */
+    @GetMapping("/toFavorites/{currentPage}")
+    public ModelAndView toFavorites(@PathVariable(value = "currentPage",required = false)Integer currentPage, HttpSession session){
+        this.unUsefulArticleCount(session);
+        ModelAndView mav = new ModelAndView();
+        User currentUser = (User)session.getAttribute(Consts.CURRENT_USER);
+
+        //从这里分页查询出收藏的内容；
+        //已下载资源的列表   -- > 改为用户收藏列表
+        Page<UserFavorites> page = userFavoritesService.list(currentUser.getUserId(),currentPage,Consts.PAGE_SIZE, Sort.Direction.DESC,"favoritesDate");
+        ArrayList<Article> articles = new ArrayList<>();
+        for(int i=0;i<page.getContent().size();i++){
+            Article article = articleService.getById(page.getContent().get(i).getArticleId());
+            articles.add(article);
+        }
+        mav.addObject("articleList",articles);
+
+        //分页html代码
+        mav.addObject("pageStr", HTMLUtil.getPagation("/user/toFavorites",page.getTotalPages(),currentPage,"没有收藏任何资源"));
+        mav.setViewName("user/favorites");
+        return mav;
+    }
+
+
+    /**
+     * 用户收藏展示
+     * @param currentPage
+     * @param session
+     * @return
+     */
+    @GetMapping("/toFavorite/{currentPage}")
+    public ModelAndView toFavorite(@PathVariable(value = "currentPage",required = false)Integer currentPage, HttpSession session){
+        this.unUsefulArticleCount(session);
+        ModelAndView mav = new ModelAndView();
+        User currentUser = (User)session.getAttribute(Consts.CURRENT_USER);
+        //从这里分页查询出收藏的内容；
+        //已下载资源的列表   -- > 改为用户收藏列表
+        Page<UserFavorites> page = userFavoritesService.list(currentUser.getUserId(),currentPage,Consts.PAGE_SIZE, Sort.Direction.DESC,"favoritesDate");
+        ArrayList<Article> articles = new ArrayList<>();
+        for(int i=0;i<page.getContent().size();i++){
+            Article article = articleService.getById(page.getContent().get(i).getArticleId());
+            articles.add(article);
+        }
+        mav.addObject("articleList",articles);
+        //分页html代码
+        mav.addObject("pageStr", HTMLUtil.getPagation("/user/toFavorite",page.getTotalPages(),currentPage,"没有收藏任何资源"));
+        mav.setViewName("user/favorite");
+        return mav;
+    }
+
+
 
     /**
      * 我的消息

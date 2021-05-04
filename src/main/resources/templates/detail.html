@@ -38,7 +38,8 @@
                     <span class="layui-badge layui-bg-black" th:text="${article.arcType.arcTypeName}">资源类别</span>
                     <span th:if="${article.free == true}" class="layui-badge layui-bg-black">免费资源</span>
                      <!-- 改动-->
-                    <span style="position: absolute;right: 60px"><button id="shareBtn" style="border: 0px;margin-right: -10px" type="button" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius"><i class="layui-icon layui-icon-tread" title="分享"> &#xe641;</i></button><span th:text="${article.share}" style="font-size: 16px"></span></span>
+                   <button id="favBtn" style="border: 0px;margin-right: -10px;position: absolute;right: 110px" type="button" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius"><i id="iFav" class="layui-icon">&#xe600;</i>收藏</button>
+                    <span style="position: absolute;right: 60px"><button id="shareBtn" style="border: 0px;margin-right: -10px" type="button" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius"><i class="layui-icon layui-icon-tread" title="分享"> &#xe641;</i><span th:text="${article.share}" style="font-size: 16px"></span></button></span>
                     <span class="fly-list-nums"><i class="iconfont" title="点击">&#xe60b</i><span th:text="${article.click}"></span> </span>
                 </div>
 <!--                <div class="detail-about">-->
@@ -389,7 +390,6 @@
     });
 </script>
 
-
 <script type="text/javascript">
     // lt 大于12
     //gt 小于12
@@ -407,6 +407,58 @@
         });
     });
 </script>
+
+
+<script th:inline="javascript">
+    //收藏资源的事件
+
+
+    $(function (){
+
+        if([[${session.currentUser}]] != null){
+            //设置页面的初始状态
+            $.post("/article/isFavorites",{"articleId":[[${article.articleId}]]},function (result) {
+                if(result.flag){//该用户收藏了该文章
+                    $("#iFav").html("&#xe658;");
+                }
+            });
+        }
+
+        //根据点击更改图标
+        $("#favBtn").click(function (){
+            var item;
+            if([[${session.currentUser}]] == null){
+                layer.msg("登陆后才能收藏资源！");
+                return;
+            }else{
+                // 文章状态，
+                $.post("/article/isFavorites",{"articleId":[[${article.articleId}]]},function (result) {
+                    if(result.flag){//该用户收藏了该文章 -> 未收藏
+                        $("#iFav").html("&#xe600;")
+                        item = false;
+                    }else{//未收藏 -> 已收藏
+                        $("#iFav").html("&#xe658;");
+                        item = true;
+                    }
+                    //调用JS函数去更改该文章的收藏状态
+                    $.post("/article/favorites",{"articleId":[[${article.articleId}]],"item":item},function (result) {
+                        if(result.success){
+                            layer.msg("成功！", {
+                                icon: 1,
+                                time: 1000
+                            });
+                        }
+                    },"json");
+
+                });
+
+
+            }
+        });
+    });
+
+</script>
+
 
 </body>
 </html>

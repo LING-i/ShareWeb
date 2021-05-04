@@ -43,6 +43,5 @@ public class StartupRunner implements CommandLineRunner {
         application.setAttribute(Consts.NEW_ARTICLE,articleService.getNewArticle(10));                  //10条最新资源
         application.setAttribute(Consts.CLICK_ARTICLE,articleService.getClickArticle(10));              //10条热门资源
         application.setAttribute(Consts.RANDOM_ARTICLE,articleService.getRandomArticle(10));            //10条随机资源（热搜推荐）
-//        application.setAttribute(Consts.LINK_LIST,linkService.listAll(Sort.Direction.ASC,"sort"));          //所有友情链接
     }
 }

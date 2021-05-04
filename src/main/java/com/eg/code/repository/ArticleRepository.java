@@ -27,8 +27,19 @@ public interface ArticleRepository extends JpaRepository<Article,Integer>, JpaSp
     @Query(value = "update article set share=share+1 where article_id=?1",nativeQuery = true)
     public void updateShare(Integer articleId);
 
+    @Modifying
+    @Query(value ="update article set is_flag = 1  where article_id = ?1" ,nativeQuery = true)
+    public void changeFalg(Integer articleId);
+
+
     @Query(value ="select article_id from user_publish where user_id = ?1" ,nativeQuery = true)
     public List<Integer> articleIdByUserId(int userId);
+
+
+    @Modifying
+    @Query(value = "update article set is_hot = 1 where article_id = ?1",nativeQuery = true)
+    public void changeHot(Integer articleId);
+
 
     /**
      * 今日发布资源总数
@@ -41,6 +52,7 @@ public interface ArticleRepository extends JpaRepository<Article,Integer>, JpaSp
      */
     @Query(value="select count(*) from article where state=1",nativeQuery = true)
     public Integer noAudit();
+
 
     /**
      * 根据资源id获取类别id

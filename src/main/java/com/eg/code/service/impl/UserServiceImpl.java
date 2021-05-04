@@ -125,6 +125,8 @@ public class UserServiceImpl implements UserService {
     public void removeBind(Integer userId) {
         userRepository.removeBind(userId);
     }
+
+
 }
 
 

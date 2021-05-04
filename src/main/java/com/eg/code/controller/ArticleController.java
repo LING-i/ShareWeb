@@ -1,10 +1,13 @@
 package com.eg.code.controller;
 
 import com.eg.code.entity.Article;
+import com.eg.code.entity.Fkey;
 import com.eg.code.entity.User;
+import com.eg.code.entity.UserFavorites;
 import com.eg.code.lucene.ArticleIndex;
 import com.eg.code.service.ArcTypeService;
 import com.eg.code.service.ArticleService;
+import com.eg.code.service.UserFavoritesService;
 import com.eg.code.service.UserService;
 import com.eg.code.util.Consts;
 import com.eg.code.util.HTMLUtil;
@@ -15,8 +18,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +44,9 @@ public class ArticleController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserFavoritesService userFavoritesService;
 
     /**
      * 按资源类型分页查询资源列表
@@ -128,6 +137,36 @@ public class ArticleController {
     }
 
 
+    @RequestMapping("/favorites")
+    public Map<String, Object> setFavorites(Integer articleId,Boolean item, HttpSession session){
+        HashMap<String,Object> map = new HashMap<>();
+        User user = (User) session.getAttribute(Consts.CURRENT_USER);
+        UserFavorites userFavorites = new UserFavorites();
+        userFavorites.setArticleId(articleId);
+        userFavorites.setUserId(user.getUserId());
+        userFavorites.setFavorites(item);
+        userFavorites.setFavoritesDate(new Date());
+        userFavoritesService.save(userFavorites);
+        map.put("success",true);
+        return  map;
+    }
+
+
+    @RequestMapping("/isFavorites")
+    public Map<String, Object> isFavorites(Integer articleId, HttpSession session){
+        HashMap<String,Object> map = new HashMap<>();
+        User user = (User) session.getAttribute(Consts.CURRENT_USER);
+        Fkey fkey = new Fkey();
+        fkey.setArticleId(articleId);
+        fkey.setUserId(user.getUserId());
+        UserFavorites favorites = userFavoritesService.getById(fkey);
+        if(favorites == null){
+            map.put("flag",false);
+        }else{
+            map.put("flag",favorites.isFavorites());
+        }
+        return  map;
+    }
 
     /**
      * 判断资源是否免费

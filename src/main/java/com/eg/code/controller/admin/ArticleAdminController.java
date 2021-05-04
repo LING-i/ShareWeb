@@ -142,7 +142,6 @@ public class ArticleAdminController {
             //审核成功建立两张User和Article的关联表
             userPublishService.addPublishArtcile(oldArticle);
 
-
         }else if(article.getState()==3){
             message.setContent("【<font color='#00ff7f'>审核失败</font>】您发布的【"+oldArticle.getName()+"】资源审核未成功！");
             message.setCause(article.getReason());

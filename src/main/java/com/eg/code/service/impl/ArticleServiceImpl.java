@@ -216,6 +216,31 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<Article> listflag() { //查询未给发布者加积分的资源
+        return articleRepository.findAll(new Specification<Article>() {
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Predicate predicate = criteriaBuilder.conjunction();
+                predicate.getExpressions().add((criteriaBuilder.equal(root.get("isFlag"),0)));
+                return predicate;
+            }
+        },Sort.by(Sort.Direction.DESC,"publishDate"));
+    }
+
+
+    @Override
+    public List<Article> listhot() {
+        return articleRepository.findAll(new Specification<Article>() {
+            @Override
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Predicate predicate = criteriaBuilder.conjunction();
+                predicate.getExpressions().add((criteriaBuilder.equal(root.get("isHot"),0)));
+                return predicate;
+            }
+        },Sort.by(Sort.Direction.DESC,"publishDate"));
+    }
+
+    @Override
     public void updateClick(Integer articleId) {
         articleRepository.updateClick(articleId);
         Article article = articleRepository.getOne(articleId);
@@ -305,5 +330,14 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.getRandomArticle(n);
     }
 
+    @Override
+    public void changeFalg(Integer articleId) {
+        articleRepository.changeFalg(articleId);
+    }
+
+    @Override
+    public void changeHot(Integer articleId) {
+        articleRepository.changeHot(articleId);
+    }
 
 }

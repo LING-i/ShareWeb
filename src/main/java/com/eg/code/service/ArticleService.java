@@ -68,6 +68,17 @@ public interface ArticleService {
     public List<Article> listStatePass();
 
     /**
+     * 查询isFlag=false的资源
+     */
+    public List<Article> listflag();
+
+    /**
+     * 查询isHot=false的资源
+     */
+    public List<Article> listhot();
+
+
+    /**
      * 点击+1
      */
     public void updateClick(Integer articleId);
@@ -113,5 +124,9 @@ public interface ArticleService {
     //10条随机资源（热搜推荐）
     public List<Article> getRandomArticle(Integer n);
 
+    //更改资源的标志位
+    public void changeFalg(Integer articleId);
+
+    public void changeHot(Integer articleId);
 
 }

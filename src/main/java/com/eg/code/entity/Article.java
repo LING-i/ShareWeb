@@ -81,6 +81,8 @@ public class Article implements Serializable {
 
     private boolean isUseful=true;             //资源链接是否有效   true 是  false 否
 
+    private boolean isFlag = false;             //是否给发布者加积分
+
     public Integer getArticleId() {
         return articleId;
     }
@@ -249,4 +251,11 @@ public class Article implements Serializable {
         isUseful = useful;
     }
 
+    public boolean isFlag() {
+        return isFlag;
+    }
+
+    public void setFlag(boolean flag) {
+        isFlag = flag;
+    }
 }

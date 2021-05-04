@@ -9,10 +9,15 @@
     <script src="/static/layui/layui.js"></script>
 </head>
 <body>
-    <div style="padding: 10px;padding-top: 30px; text-align: center;">
-        下载地址：<a th:href="${article.download}" target="_blank" th:text="${article.download}"></a>
-        <br/>
-        密码：<font color="red" th:text="${article.password}"></font>
+    <div style="padding: 10px;padding-top: 15px; text-align: center;">
+        <div style="float:left">
+            下载地址：<a th:href="${article.download}" target="_blank" th:text="${article.download}"></a>
+        </div>
+        <div style="float:left;margin-top: 10px">
+            密码：<font color="red" th:text="${article.password}"></font>
+        </div>
+
+
     </div>
 </body>
 </html>

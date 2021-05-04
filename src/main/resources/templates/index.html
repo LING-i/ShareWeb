@@ -59,8 +59,10 @@
                                 <i class="iconfont" title="人气">&#xe60b;</i> <span th:text="${article.click}"></span>
                             </span>
                         </div>
+
                         <div class="fly-list-badge">
-                            <span th:if="${article.hot}" class="layui-badge layui-bg-red">热门</span>
+<!--                            <span th:if="${article.hot}" class="layui-badge layui-bg-red">热门</span>-->
+                            <span th:if="${article.hot}" ><img th:src= "'/static/img/hot.png'" width="20px" height="20px"></span>
                         </div>
                     </li>
                 </ul>
@@ -151,7 +153,6 @@
 
 <script th:inline="javascript">
     //分享资源的事件
-
     layui.use('layer', function(){
         var layer = layui.layer;
     });
@@ -167,8 +168,28 @@
             }
         });
     });
-
 </script>
+
+<script th:inline="javascript">
+    //分享资源的事件
+
+    layui.use('layer', function(){
+        var layer = layui.layer;
+    });
+
+    $(function (){
+        $("#toFavorites").click(function (){
+
+            if([[${session.currentUser}]] == null){
+                layer.msg("登陆后才能查看！");
+                return false;
+            }else{
+                window.open("/user/toFavorites/1","_parent");
+            }
+        });
+    });
+</script>
+
 
 <script type="text/javascript">
 // lt 大于12

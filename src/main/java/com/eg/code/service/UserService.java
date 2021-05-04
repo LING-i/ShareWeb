@@ -54,6 +54,8 @@ public interface UserService {
      */
     public Integer todayLogin();
 
+
+
     /**
      * 根据条件查询用户列表
      * @param s_user                条件
@@ -76,4 +78,6 @@ public interface UserService {
      * 解除QQ绑定
      */
     public void removeBind(Integer userId);
+
+
 }

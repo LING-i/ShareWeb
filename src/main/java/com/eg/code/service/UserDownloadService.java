@@ -1,6 +1,7 @@
 package com.eg.code.service;
 
 import com.eg.code.entity.UserDownload;
+import com.eg.code.entity.UserFavorites;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
